@@ -33,5 +33,5 @@ Admin Page with role model and Route AuthGuard
 - firebase 8.4.2
 - ngx-pagination 5.1.1
 
-## Devlopment Team
+## Development Team
 - Reynaldi Julio Setiabudi
