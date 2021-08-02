@@ -1,0 +1,31 @@
+<!-- PUBLIC SITE -->
+<ul *ngIf="public">
+    <li><a routerLink="" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">Beranda</a></li>
+    <li><a routerLink="/produk" routerLinkActive="active">Produk</a></li>
+    <li>
+        <a routerLink="/layanan" routerLinkActive="active">Layanan</a>
+        <ul>
+            <li><a routerLink="/layanan/layanan-a" routerLinkActive="active">Layanan A</a></li>
+            <li><a routerLink="/layanan/layanan-b" routerLinkActive="active">Layanan B</a></li>
+            <li><a routerLink="/layanan/layanan-c" routerLinkActive="active">Layanan C</a></li>
+        </ul>
+    </li>
+    <li><a routerLink="/tentang-kami" routerLinkActive="active">Tentang Kami</a></li>
+    <li><a routerLink="/hubungi-kami" routerLinkActive="active">Hubungi Kami</a></li>
+    <li><a routerLink="/account" routerLinkActive="active">MyAccount</a></li>
+    <li *ngIf="auth.data?.role == 'superadmin' || auth.data?.role == 'admin'"><a routerLink="/admin" (click)="public=!public">View Admin Site</a></li>
+</ul>
+
+<!-- ADMIN SITE -->
+<ul *ngIf="!public">
+    <ng-container *ngIf="auth.data?.role == 'superadmin' || auth.data?.role == 'admin'">
+    <li><a routerLink="/admin/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">Dashboard</a></li>
+    <li><a routerLink="/admin/order" routerLinkActive="active">Orders</a></li>
+    </ng-container>
+    <ng-container *ngIf="auth.data?.role == 'superadmin'">
+    <li><a routerLink="/admin/product" routerLinkActive="active">Products</a></li>
+    <li><a routerLink="/admin/services" routerLinkActive="active">Services</a></li>
+    </ng-container>
+    <li><a routerLink="/admin/account" routerLinkActive="active">My Account</a></li>
+    <li><a routerLink="/" (click)="public=!public">View Public Site</a></li>
+</ul>

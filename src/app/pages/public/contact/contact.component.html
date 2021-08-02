@@ -1,0 +1,26 @@
+<p>contact works!</p>
+<ng-container *ngIf="!data">Loading</ng-container>
+<ng-container *ngIf="data">
+    <!--Filter List-->
+    <hr/>
+    <div style="display: flex;flex-direction: row;justify-content: space-around;width: 70%;">
+        <filter-checkbox style="display: flex;flex-direction: row;justify-content: space-around;width: 70%;"
+            Title="Filter by"
+            [ListModel] ="data"
+            [FilterModel]="filterBy"
+            [FilteredModel]="filterSelected">
+        </filter-checkbox>
+    </div>
+    
+    <hr/>
+    Total Item/s {{(data|filter:filterSelected).length}}
+    <ul>
+        <li *ngFor="let a of (data|filter:filterSelected) | paginate: {itemsPerPage: 10, currentPage: page}; let i = index">
+            <p>{{a.firstName +' '+ a.lastName}} - {{a.gender}} - {{a.status}} - {{a.group}}</p>
+            <img [src]="a.img" style="width: 100px;"/>
+        </li>
+    </ul>
+    <pagination-controls (pageChange)="page = $event"></pagination-controls>
+    <pre>{{filterSelected|json}}</pre>
+    <pre>{{(data|filter:filterSelected)|json}}</pre>
+</ng-container>

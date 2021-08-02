@@ -1,0 +1,46 @@
+<!-- NO AUTH -->
+<ng-container *ngIf="!auth.status">
+    <div *ngIf="pop==''">
+        <h3>Login</h3>
+        <form #login="ngForm" (ngSubmit)="masuk(login.value)">
+            <input type="email" placeholder="email" name="email" ngModel required/>
+            <input type="password" placeholder="password" name="password" ngModel required/>
+            <button>Masuk</button>
+        </form>
+        <a href="javascript:void(0)" (click)="pop='reset'">Forgot Password</a> | <a href="javascript:void(0)" (click)="pop='register'">Register</a>
+    </div>
+    <div *ngIf="pop=='reset'">
+        <h3>Reset Password</h3>
+        <form #resetPassword="ngForm" (ngSubmit)="resetSandi(resetPassword.value)">
+            <input type="email" placeholder="email" name="email" ngModel required/>
+            <button>Reset</button>
+        </form>
+        <a href="javascript:void(0)" (click)="pop=''">Cancel</a>
+    </div>
+    
+    <div *ngIf="pop=='register'">
+        <h3>Register</h3>
+        <form #register="ngForm" (ngSubmit)="daftar(register.value)">
+            <input type="email" placeholder="email" name="email" ngModel required/>
+            <input type="password" placeholder="password" name="password" ngModel required/>
+            <button>Regsiter</button>
+        </form>
+        <a href="javascript:void(0)" (click)="pop=''">Cancel</a>
+    </div>
+</ng-container>
+
+<!-- ON AUTH -->
+<ng-container *ngIf="auth.status">
+    <h3>My Account</h3>
+    <form (ngSubmit)="perbaharuiData()">
+        <input type="text" placeholder="John Doe" name="fullname" [(ngModel)]="auth.data.fullname" />
+        <input type="email" placeholder="email" name="email" [(ngModel)]="auth.data.email" />
+        {{auth.data.datecreate|date}}<br/>
+        <button type="submit">Update</button> <button type="button" (click)="keluar()">Keluar</button>
+    </form>
+</ng-container>
+
+
+<span *ngIf="auth.message">{{auth.message}} <a href="javascript:void(0)" (click)="removeMessage()">✕</a></span>
+
+<pre>{{auth|json}}</pre>

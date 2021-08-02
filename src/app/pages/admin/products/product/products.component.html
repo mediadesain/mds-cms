@@ -1,0 +1,44 @@
+<ng-container *ngIf="!data">
+    Loading Data
+</ng-container>
+
+<ng-container *ngIf="data">
+    <!--Counter List-->
+    <hr/>
+    Total Product {{data.status.total}}<br/>
+    Total Draft {{data.status.draft}}<br/>
+    Total Unlisted {{data.status.unlisted}}<br/>
+    Total Published {{data.status.published}}<br/>
+    <hr/>
+    <!--Filter List-->
+    <div style="display: flex;flex-direction: row;justify-content: space-around;width: 70%;">
+        <filter-checkbox style="display: flex;flex-direction: row;justify-content: space-around;width: 70%;"
+            Title="Filter by"
+            [ListModel] ="data.products"
+            [FilterModel]="filterBy"
+            [FilteredModel]="filterSelected">
+        </filter-checkbox>
+    </div>
+    <hr/>
+    <label>Filter by Status</label>
+    <select [(ngModel)]="filterDropdown">
+        <option value="">Show All</option>
+        <option>Draft</option>
+        <option>Published</option>
+    </select>
+
+    <!--Data List-->
+    <hr/>
+    <div *ngIf="(data.products|filter:filterSelected|filter:{'status':filterDropdown|lowercase}).length == 0">Data Not Found</div>
+    <ol>
+        <li *ngFor="let x of data.products|filter:filterSelected|filter:{'status':filterDropdown|lowercase}">{{x.status}} {{x.name}} - {{x.sku}} <a routerLink="/admin/product/{{x.url}}">Detail</a></li>
+    </ol>
+    <hr/>
+</ng-container>
+
+<pre>Filter: {{filterSelected|json}}</pre>
+<pre>
+Auth As: {{auth.data?.role}}
+Data: {{data?.products|filter:filterSelected|json}}
+Status: {{data?.status|json}}
+</pre>

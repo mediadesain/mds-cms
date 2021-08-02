@@ -1,0 +1,72 @@
+<ng-container *ngIf="!data">
+    Loading Data
+</ng-container>
+
+<ng-container *ngIf="data">
+    <form #updateProduct="ngForm" (ngSubmit)="updateData(updateProduct.value)">
+        <div class="block">
+            <input type="text" name="sku" [(ngModel)]="data.sku"/>
+            <input type="text" name="name" [(ngModel)]="data.name"/>
+            <input type="text" name="brand" [(ngModel)]="data.brand"/>
+            <input type="text" name="category" [(ngModel)]="data.category"/>
+            <input type="text" name="url" [(ngModel)]="data.url"/>
+            <textarea name="description" [(ngModel)]="data.description"></textarea>
+        </div>
+        <input [hidden]="true" type="text" name="mediafiles" [(ngModel)]="data.mediafiles">
+        <br/>
+        <input [hidden]="true" type="text" name="_variant" [(ngModel)]="data._variant">
+        <div *ngFor="let a of data._variant">
+            <input type="text" [(ngModel)]="a.sku" [ngModelOptions]="{standalone: true}"/>
+            <input type="text" [(ngModel)]="a.type" [ngModelOptions]="{standalone: true}"/>
+            <a href="javascript:void(0)" (click)="pop = !pop;selection=a.photos">Select</a>{{a.photos.length}} thumbnail/s
+            <input type="text" [(ngModel)]="a.stock" [ngModelOptions]="{standalone: true}"/>
+            <input type="text" [(ngModel)]="a.price" [ngModelOptions]="{standalone: true}"/>
+        </div>
+        <a href="javascript:void(0)" (click)="addVariant(data._variant)"> Add Variant</a>
+    
+        <div *ngIf="pop" style="margin: 30px 0;">
+            <hr/>
+            <h3>[File Management]</h3>
+            <i>{{selection.length}} thumbnail image/s selected</i><br/>
+            <ul>
+                <li *ngFor="let a of data.thumbnail.photos">
+                    <label>
+                        <input type="checkbox" name="thumb" [checked]="checkFileExist(selection, a) != -1 ? true : false" (change)="updateCheckbox(selection, a)"> {{a.filename}}
+                    </label>
+                    <a href="javascript:void(0)" (click)="delete(a.fileid)">✕</a>
+                </li>
+            </ul>
+            <label for="file-upload">[IMG/BUTTON/ETC]</label>
+            <input id="file-upload" type="file" (change)="uploader($event, '/products/'+data.sku, '/product/'+data.sku+'/mediafiles/photos', data.mediafiles.photos)" multiple>
+            <!--accept="image/*"-->
+            {{strgstservice.status|json}}
+            <br/>
+            <a href="javascript:void(0)" (click)="pop = !pop">Select</a>
+            <hr/>
+        </div>
+        <p>
+            <input id="status1" type="radio" name="status" [(ngModel)]="data.status" [value]="'published'" /> <label for="status1">Published</label>
+            <input id="status2" type="radio" name="status" [(ngModel)]="data.status" [value]="'unlisted'" /> <label for="status2">Unlisted</label>
+            <input id="status3" type="radio" name="status" [(ngModel)]="data.status" [value]="'draft'" /> <label for="status3">Draft</label>
+        </p>
+        <br/>
+        <small>
+            <ul>
+                <li *ngFor="let x of strgstservice.status">
+                    <ng-container *ngIf="x < 100">uploading {{x}}%</ng-container>
+                    <ng-container *ngIf="x >= 100">File has been uploaded</ng-container>
+                </li>
+            </ul>
+        </small>
+        <button>Update Data</button>
+    </form>
+</ng-container>
+
+
+<pre>
+Auth As: {{auth.data?.role}}
+Data : {{data|json}}
+</pre>
+<style>
+    .block input[type="text"], .block textarea {display: block;}
+</style>

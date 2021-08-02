@@ -1,0 +1,43 @@
+<ng-container *ngIf="!data">
+    Loading Data
+</ng-container>
+
+<ng-container *ngIf="data">
+    <img [src]="data.thumbnailmain._fileurl"/>
+    <br/>
+    <div *ngIf="data._variant[selected].photos.length > 1">
+        <span *ngFor="let a of data.thumbnail.photos | filter:{
+            'filename': data._variant[selected].photos
+        }">
+            <a href="javascript:void(0)" (click)="updateMainThumb(data, a)"><img [src]="a._fileurl" style="max-width:150px"/></a>
+        </span>
+    </div>
+    
+    <iframe *ngIf="data.mediafiles.videos" [src]="data.mediafiles.videos|safeurl" frameborder="0"></iframe> 
+    
+    <div>
+        {{data._variant[selected].photos|json}} - {{data._variant[selected].photos.length}} Images
+        <p>{{data._variant[selected]?.sku || data.sku}}</p>
+        <h3>{{data.name}}</h3>
+        <p>{{data.description}}</p>
+    
+        <p *ngIf="data._variant.length != 1">Select Variant:<br/>
+            <select [(ngModel)]="selected" (ngModelChange)="resetMainThumb(data, data._variant[selected])">
+                <option *ngFor="let a of data._variant;let i = index" [value]="i">{{a.type}}</option>
+            </select>
+        </p>
+        <p>
+            {{data._variant[selected]?.price}}<br/>
+            <small>
+                {{data._variant[selected]?.stock < 1 ? "Out of Stock" : "Stock Available "+data._variant[selected]?.stock }}
+            </small>
+            <br/>
+            <button [disabled]="data._variant[selected]?.stock < 1">Buy Now</button>
+        </p>
+    </div>
+</ng-container>
+
+<pre>
+Auth As: {{auth.data?.role|json}}
+Data : {{data|json}}
+</pre>
