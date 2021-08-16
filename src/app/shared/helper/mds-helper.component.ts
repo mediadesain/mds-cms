@@ -1,6 +1,11 @@
-//Mediadesain Helper
-//Documentation https://bitbucket.org/mediadesain/javascript-mds-doc/src/javascript-mds-doc/
+/* Mediadesain Helper
+* Documentation https://bitbucket.org/mediadesain/javascript-mds-doc/src/javascript-mds-doc/
+*
+* Version 1.1.3
+* Last Update 30-Jul-2021 
+*/
 
+// String
 export const lowerCase = (str:any) => {
     return str.toLowerCase()
 };
@@ -39,6 +44,8 @@ export const youtubeThumbnail = (val:any, size:any) =>{
     val = youtubeID(val)
     return 'https://i.ytimg.com/vi/'+val+'/'+size+'.jpg';
 };
+
+// Interger
 export const perpendekAngka = (value:any) => {
     var suffixes = ["", "k", "m", "b","t"];
     var suffixNum = Math.floor((""+value).length/3);
@@ -53,12 +60,23 @@ export const mataUang = (money:any, format:any, code:any, decimal:any) => {
         { style: 'currency', currency: code, minimumFractionDigits: decimal }
     ).format(money);
 }
+
+// Object
 export const hapusObjValKosong = (obj:any) => {
     for (var namaProperty in obj) {
         if (obj[namaProperty] === null || obj[namaProperty] === undefined || obj[namaProperty] === "") {
             delete obj[namaProperty];
         }
     } return obj
+};
+
+// Array
+export const hitungUnikValue = (data:any) => {
+    var count:any = {};
+    data.forEach((i:any) => {
+        count[i] = (count[i] || 0) + 1;
+    });
+    return count
 };
 export const filterMultiple = (data:any, key:any, filterdata:any) => {
     var newdata:any = []
@@ -68,9 +86,19 @@ export const filterMultiple = (data:any, key:any, filterdata:any) => {
     });
     return newdata
 };
-export const groupSeValue = (arr:any, keyvalue:any) => {
+export const groupSeValue = (arr:any, key:any) => {
+    const keyvalue = (a:any) => a[key]
     return arr.reduce((r:any, v:any, i:any, a:any, k:any = keyvalue(v)) => ((r[k] || (r[k] = [])).push(v), r), {});
 };
-export const jumblahKan = (total:any, num:any) => {
-    return total + num;
-};
+export const jumblahKan = (arr:any) => {
+    return arr.reduce( (total:any,num:any) => total + num )
+}
+export const listObject = (arr:any, objectkey:string) => {
+    var groupObj = {}
+    for(const item of arr){
+        var newobj:any = {};
+        newobj[item[objectkey]] = item;
+        Object.assign(groupObj, newobj);
+    }
+    return groupObj
+}

@@ -1,5 +1,7 @@
 <p>contact works!</p>
-<ng-container *ngIf="!data">Loading</ng-container>
+
+<ng-container *ngIf="isLoading">Loading</ng-container>
+
 <ng-container *ngIf="data">
     <!--Filter List-->
     <hr/>
@@ -11,9 +13,13 @@
             [FilteredModel]="filterSelected">
         </filter-checkbox>
     </div>
-    
     <hr/>
-    Total Item/s {{(data|filter:filterSelected).length}}
+</ng-container>
+
+
+<ng-container *ngIf="data?.length == 0">No Data Found</ng-container>
+<ng-container *ngIf="data">
+    <ng-container *ngIf="data?.length > 0">Total Item/s {{(data|filter:filterSelected).length}}</ng-container>
     <ul>
         <li *ngFor="let a of (data|filter:filterSelected) | paginate: {itemsPerPage: 10, currentPage: page}; let i = index">
             <p>{{a.firstName +' '+ a.lastName}} - {{a.gender}} - {{a.status}} - {{a.group}}</p>

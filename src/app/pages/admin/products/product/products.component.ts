@@ -12,15 +12,13 @@ export class ProductsComponent implements OnInit {
   filterSelected : any = {};
   filterDropdown : string = "";
   constructor(
-    public auth: AuthService,
-    private dbservice: DatabaseService
+    public _auth: AuthService,
+    public _database: DatabaseService
   ) {}
 
   ngOnInit(): void {
-    console.log("Auth",this.auth)
-
     var reference = { url: '/product', query: false }
-    this.dbservice.getDatabase(reference).then(
+    this._database.getDatabase(reference).then(
       (val:any) => {
         //Data
         var ArrModified:any = {};
@@ -33,8 +31,9 @@ export class ProductsComponent implements OnInit {
         this.data = ArrModified;
         
         console.group('Product Page - Admin')
-          console.log("Auth",this.auth)
-          console.log("Data List",this.data);
+          console.log("Auth",this._auth)
+          console.log("Database Service",this._database)
+          console.log("Data List",this.data)
         console.groupEnd()
       }
     )

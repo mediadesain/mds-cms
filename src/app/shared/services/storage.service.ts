@@ -8,7 +8,8 @@ import "firebase/storage";
 @Injectable()
 export class StorageService {
     status:number[]=[];
-    constructor(private dbservice: DatabaseService) {}
+    isLoading:boolean = false;
+    constructor(private _database: DatabaseService) {}
 
     fileUrl(path:string){
         return new Promise( (resolve, reject)=> {
@@ -19,6 +20,7 @@ export class StorageService {
     };
     
     uploadFile(detailupload:any){
+        this.isLoading = true;
         //Files
         var target = detailupload.files.target as HTMLInputElement;
         var files = target.files as FileList;
@@ -32,7 +34,7 @@ export class StorageService {
             uploadTask.on('state_changed',
                 (snapshot:any) => {
                     const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                    console.log('file', i, progress);
+                    //console.log('file', i, progress);
                     this.status[i] = parseInt(progress.toFixed(0));
                     if(this.status[i] >= 100){
                         //Database
@@ -41,9 +43,11 @@ export class StorageService {
                         if(checkfileid >= 0) filedatabase['fileid'] = exsistfile[checkfileid].fileid
                         else filedatabase['fileid'] = randomKarakter(20)
                         filedatabase['filename'] = files[i].name
-                        this.dbservice.writeDatabase({
-                            databasepath: detailupload.databasepath+'/'+filedatabase.fileid,
-                            value: filedatabase
+                        this._database.writeDatabase({
+                            url: detailupload.databasepath+'/'+filedatabase.fileid,
+                            value: filedatabase,
+                            type: 'put',
+                            isShowAlert: false
                         })
                     }
                 },
@@ -52,7 +56,7 @@ export class StorageService {
                     alert('Account Not allow to write file');
                 },
                 () => {
-                    console.log('complete')
+                    //console.log('complete')
                     // uploadTask.snapshot.ref.getDownloadURL().then(downloadURL => {
                     //     console.log(downloadURL);
                     // });
@@ -60,9 +64,10 @@ export class StorageService {
             );
         }
         Promise.all(promises).then(tasks => {
-            console.log('all uploads complete');
+            alert('all uploads complete');
             setTimeout(()=>{
                 this.status = []
+                this.isLoading = false;
             }, 1000)
         });
     };

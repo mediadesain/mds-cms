@@ -9,25 +9,25 @@ export class LoginComponent implements OnInit {
   
   pop:string = '';
 
-  constructor(public auth: AuthService) {}
+  constructor(public _auth: AuthService) {}
 
   ngOnInit(){}
 
   masuk(val:any){
     console.log("asd")
-    this.auth.signIn(val);
+    this._auth.signIn(val);
   }
   keluar(){
-    console.log(this.auth)
-    this.auth.signOut()
+    console.log(this._auth)
+    this._auth.signOut()
   }
   resetSandi(val:any){
-    console.log(this.auth)
-    this.auth.resetPassword(val.email)
+    console.log(this._auth)
+    this._auth.resetPassword(val.email)
   }
   perbaharuiData(){
-    console.log(this.auth.data)
-    this.auth.updateDataAuth(this.auth.data)
+    console.log(this._auth.data)
+    this._auth.updateDataAuth(this._auth.data)
   }
   daftar(register:any){
     //User Data Structure
@@ -44,9 +44,9 @@ export class LoginComponent implements OnInit {
     userdata['email'] = register.email;
     userdata['password'] = register.password;
     //console.log('register', userdata)
-    this.auth.registerAccount(userdata)
+    this._auth.registerAccount(userdata)
   }
   removeMessage(){
-    this.auth.hideMessage()
+    this._auth.hideMessage()
   }
 }

@@ -18,50 +18,45 @@ export class ProductDetailComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    public auth: AuthService,
-    private dbservice: DatabaseService,
-    public strgstservice: StorageService
+    public _auth: AuthService,
+    private _database: DatabaseService,
+    public _storage: StorageService
   ) { }
 
   ngOnInit() {
-    console.log("Auth", this.auth)
+    console.log("Auth", this._auth)
 
     var url = this.route.snapshot.paramMap.get("url")
     var reference = { url: '/product', query: true, key: 'url', value: url }
-    this.dbservice.getDatabase(reference).then(
+    this._database.getDatabase(reference).then(
       (val) => {
-        var ArrModified = Object.values(val)
-        ArrModified.forEach((a:any) => {
-          //Parse Media Files
-          if(!a.mediafiles)
-            a.mediafiles = {};
-          
-          var mediafiles_array = Object.values(a.mediafiles.photos);
-          mediafiles_array.forEach( (b:any) => {
-            this.strgstservice.fileUrl('/products/'+a.sku+'/'+b.filename).then( url => {
-              a.mediafiles.photos[b.fileid]._fileurl = url
-            })
-          } )
-          a.mediafiles.videos = a.mediafiles.videos ? youtubeEmbed(a.mediafiles.videos) : null;
-          
-          //Parse Variant
-          a._variant = Object.values(a.variant);
-          a._variant.forEach( (b:any)=> {
-            if(b.photos)
-              b.photos = JSON.parse(b.photos) 
-          });
-
-          //Parse Main Thumbnail
-          if(!a.thumbnail)
-            a.thumbnail = {};
-          
-          a.thumbnail.photos = mediafiles_array;
-          var mainfilenamem = a._variant[this.selected].photos[0]
-          a.thumbnailmain = a.thumbnail.photos.filter( (x:any) =>x.filename == mainfilenamem)[0];
-
-          a._totalstock = a._variant.map( (b:any)=>b.stock ).reduce(jumblahKan);
+        var ArrModified:any = Object.values(val)[0]
+        //Parse Media Files
+        if(!ArrModified['mediafiles'])
+          ArrModified['mediafiles'] = {};
+        var mediafiles_array = Object.values(ArrModified['mediafiles'].photos);
+        mediafiles_array.forEach( (b:any) => {
+          this._storage.fileUrl('/products/'+ArrModified.sku+'/'+b.filename).then( url => {
+            ArrModified['mediafiles'].photos[b.fileid]._fileurl = url
+          })
+        })
+        ArrModified['mediafiles'].videos = ArrModified['mediafiles'].videos ? youtubeEmbed(ArrModified['mediafiles'].videos) : null;
+        
+        //Parse Variant
+        ArrModified['_variant'] = Object.values(ArrModified['variant']);
+        ArrModified['_variant'].forEach( (b:any)=> {
+          if(b['photos']) b['photos'] = JSON.parse(b.photos) 
         });
-        this.data = ArrModified[0];
+
+        //Parse Main Thumbnail
+        if(!ArrModified['thumbnail'])
+          ArrModified['thumbnail'] = {};
+        ArrModified['thumbnail'].photos = mediafiles_array;
+        var mainfilename = ArrModified['_variant'][this.selected].photos[0]
+        ArrModified['thumbnailmain'] = ArrModified.thumbnail.photos.filter( (x:any) =>x.filename == mainfilename)[0];
+        ArrModified['_totalstock'] = jumblahKan(ArrModified['_variant'].map( (b:any)=>b.stock ));
+        
+        this.data = ArrModified;
         console.log("Data",this.data)
       }
     )

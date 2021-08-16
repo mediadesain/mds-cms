@@ -12,8 +12,8 @@ export class ProductsComponent implements OnInit {
   filterSelected : any = {};
 
   constructor(
-    public auth: AuthService,
-    private dbservice: DatabaseService
+    public _auth: AuthService,
+    private _database: DatabaseService
   ) {}
 
   ngOnInit(): void {
@@ -22,16 +22,17 @@ export class ProductsComponent implements OnInit {
 
   loadData(){
     var reference = { url: '/product', query: false}
-    this.dbservice
+    this._database
       .getDatabase(reference)
       .then((val:any) => {
         var ArrayModified:any = {};
+        console.log(Object.values(val))
         ArrayModified['products'] = Object.values(val).filter( (a:any) => a.status == 'published');
         ArrayModified['total'] = ArrayModified.products.length;
         this.data = ArrayModified;
 
         console.group('Product Page')
-          console.log("Auth",this.auth)
+          console.log("Auth",this._auth)
           console.log("Data List",this.data);
         console.groupEnd()
       })

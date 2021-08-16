@@ -1,31 +1,32 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { DatabaseService } from 'src/app/shared/services/database.service';
 
 @Component({
   selector: 'app-contact',
   templateUrl: './contact.component.html'
 })
 export class ContactComponent implements OnInit {
+  isLoading: boolean = false;
   data : any;
   filterBy : string[] = ['status','gender','group']
   filterSelected = {}
   page = 1
-  constructor(private http : HttpClient) { }
+  constructor(
+    private _database: DatabaseService
+  ) { }
 
   ngOnInit(): void {
-    this.http.get("https://mygsapi.firebaseio.com/v2/item-test.json").subscribe(
-      (data) => {
-        this.data = Object.values(data);
-        this.data.forEach((element:any,key:number) => {
-          element.img = 'https://picsum.photos/200/300?random='+ key+1
-        });
+    this.isLoading = true;
+    var reference = { url: '/v2/item-test', query: false, /*key: 'gender', value: 'sss'*/ }
+    this._database.getDatabase(reference).then(
+      (val) => {
+        this.data = Object.values(val);
+        this.data.forEach((element:any,key:number) => element.img = 'https://picsum.photos/200/300?random='+ key+1);
+        this.isLoading = false;
         console.log("Sumber data api", this.data);
-        console.log("Sumber data api", [...new Set(this.data.map((a:any)=>a.group))]);
-      },
-      (err) => { console.log("Jika error", err) },
-      () => { console.log("Pemeberitahuan Parsing Data Selesai") }
-    );
-
+      }
+    )
   }
 
 }

@@ -1,5 +1,5 @@
 <!-- NO AUTH -->
-<ng-container *ngIf="!auth.status">
+<ng-container *ngIf="!_auth.isAuth">
     <div *ngIf="pop==''">
         <h3>Login</h3>
         <form #login="ngForm" (ngSubmit)="masuk(login.value)">
@@ -30,17 +30,17 @@
 </ng-container>
 
 <!-- ON AUTH -->
-<ng-container *ngIf="auth.status">
+<ng-container *ngIf="_auth.isAuth">
     <h3>My Account</h3>
     <form (ngSubmit)="perbaharuiData()">
-        <input type="text" placeholder="John Doe" name="fullname" [(ngModel)]="auth.data.fullname" />
-        <input type="email" placeholder="email" name="email" [(ngModel)]="auth.data.email" />
-        {{auth.data.datecreate|date}}<br/>
+        <input type="text" placeholder="John Doe" name="fullname" [(ngModel)]="_auth.data.fullname" />
+        <input type="email" placeholder="email" name="email" [(ngModel)]="_auth.data.email" />
+        {{_auth.data.datecreate|date}}<br/>
         <button type="submit">Update</button> <button type="button" (click)="keluar()">Keluar</button>
     </form>
 </ng-container>
 
 
-<span *ngIf="auth.message">{{auth.message}} <a href="javascript:void(0)" (click)="removeMessage()">✕</a></span>
+<span *ngIf="_auth.message">{{_auth.message}} <a href="javascript:void(0)" (click)="removeMessage()">✕</a></span>
 
-<pre>{{auth|json}}</pre>
+<pre>{{_auth|json}}</pre>

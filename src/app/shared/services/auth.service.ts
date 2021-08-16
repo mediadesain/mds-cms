@@ -21,7 +21,7 @@ export interface AuthData {
 
 @Injectable()
 export class AuthService {
-  status:boolean = false;
+  isAuth:boolean = false;
   data:any;
   message:string = "";
   
@@ -45,7 +45,7 @@ export class AuthService {
         firebase.database().ref('/users').orderByChild("uid").equalTo(auth.uid).on('value', 
           (snapshot) => {
             this.data = snapshot.val()[auth.uid]
-            this.status = true;
+            this.isAuth = true;
           },
           (error) => console.log('error')
         );
@@ -80,7 +80,7 @@ export class AuthService {
   signOut(){
     firebase.auth().signOut()
       .then( () => {
-        this.status = false;
+        this.isAuth = false;
         this.data = null;
         this.message = 'SignOut Success';
       })
