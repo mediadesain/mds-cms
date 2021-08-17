@@ -17,7 +17,7 @@ export class ProductsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    var reference = { url: '/product', query: false }
+    var reference = { url: '/v2/products', query: false }
     this._database.getDatabase(reference).then(
       (val:any) => {
         //Data

@@ -1,11 +1,14 @@
 <ng-container *ngIf="!data">
     Loading Data
 </ng-container>
-{{_storage.isLoading|json}}
+
 <ng-container *ngIf="data">
     <form #updateProduct="ngForm" (ngSubmit)="updateData(updateProduct.value)">
         <div class="block">
-            <input type="text" name="sku" [(ngModel)]="data.sku"/>
+            <!--.ng-invalid:not(form)  { border: 2px solid #a94442; }
+                .ng-valid[required], .ng-valid.required  { border-left: 1px solid #42A948; }-->
+            <input type="text" name="sku" [(ngModel)]="data.sku" #sku="ngModel" required />
+            <i [hidden]="sku.valid">Sku is required</i>
             <input type="text" name="name" [(ngModel)]="data.name"/>
             <input type="text" name="brand" [(ngModel)]="data.brand"/>
             <input type="text" name="category" [(ngModel)]="data.category"/>
@@ -16,30 +19,32 @@
         <br/>
         
         <div *ngFor="let a of data._variant">
-            <input type="text" [(ngModel)]="a.sku" [ngModelOptions]="{standalone: true}"/>
+            <a href="javascript:void(0)" (click)="pop = !pop;selection=a._photos">❐ Select</a> <small>{{a._photos.length}} thumbnail/s </small>
+            <input type="text" [(ngModel)]="a.sku" [ngModelOptions]="{standalone: true}" #childSku="ngModel" required />            
             <input type="text" [(ngModel)]="a.type" [ngModelOptions]="{standalone: true}"/>
-            <a href="javascript:void(0)" (click)="pop = !pop;selection=a._photos">Select</a>{{a._photos.length}} thumbnail/s
             <input type="text" [(ngModel)]="a.stock" [ngModelOptions]="{standalone: true}"/>
             <input type="text" [(ngModel)]="a.price" [ngModelOptions]="{standalone: true}"/>
+            &nbsp;
+            <a href="javascript:void(0)" (click)="removeVariant()">✕</a>
         </div>
         <input [hidden]="true" type="text" name="_variant" [(ngModel)]="data._variant">
-        <a href="javascript:void(0)" (click)="addVariant(data._variant)"> Add Variant</a>
-    
+        <a [hidden]="popvariant" href="javascript:void(0)" (click)="popvariant=!popvariant"> Add Variant</a> 
+
         <div [hidden]="!pop" style="margin: 30px 0;">
             <hr/>
             <h3>[File Management]</h3>
-            <i>{{selection.length}} thumbnail image/s selected</i><br/>
+            <label for="file-upload">[IMG/BUTTON UPLOAD]</label> / 
+            <input id="file-upload" type="file" (change)="fileUpload($event, '/products/'+data.sku, '/v2/products/'+data.sku+'/mediafiles/photos', data.mediafiles.photos)" multiple>
             <ul>
                 <li *ngFor="let a of data._thumbnail.photos">
                     <label>
                         <input type="checkbox" name="thumb" [checked]="checkFileExist(selection, a) != -1 ? true : false" (change)="updateCheckbox(selection, a)"> {{a.filename}}
                     </label>
-                    <a href="javascript:void(0)" (click)="delete(a.fileid)">✕</a>
+                    <a href="javascript:void(0)" (click)="fileDelete(a.fileid)">✕</a>
                 </li>
             </ul>
             <input [hidden]="true" type="text" name="_thumbnail" [(ngModel)]="data._thumbnail.photos">
-            <label for="file-upload">[IMG/BUTTON/ETC]</label>
-            <input id="file-upload" type="file" (change)="uploader($event, '/products/'+data.sku, '/product/'+data.sku+'/mediafiles/photos', data.mediafiles.photos)" multiple>
+            <i>{{selection.length}} thumbnail image/s selected</i><br/>
             <!--accept="image/*"
             {{_storage.status|json}}-->
             <small>
@@ -50,19 +55,29 @@
                     </li>
                 </ul>
             </small>
-            <br/>
-            <a href="javascript:void(0)" (click)="pop = !pop">Select</a>
+            <a href="javascript:void(0)" (click)="pop = !pop">Done</a>
             <hr/>
         </div>
-        <p>
-            <input id="status1" type="radio" name="status" [(ngModel)]="data.status" [value]="'published'" /> <label for="status1">Published</label>
-            <input id="status2" type="radio" name="status" [(ngModel)]="data.status" [value]="'unlisted'" /> <label for="status2">Unlisted</label>
-            <input id="status3" type="radio" name="status" [(ngModel)]="data.status" [value]="'draft'" /> <label for="status3">Draft</label>
-        </p>
-        <br/>
-        <button [disabled]="_storage.isLoading">Update Data</button>
+
+        <div [hidden]="popvariant">
+            <p>
+                <input id="status1" type="radio" name="status" [(ngModel)]="data.status" [value]="'published'" /> <label for="status1">Published</label>
+                <input id="status2" type="radio" name="status" [(ngModel)]="data.status" [value]="'unlisted'" /> <label for="status2">Unlisted</label>
+                <input id="status3" type="radio" name="status" [(ngModel)]="data.status" [value]="'draft'" /> <label for="status3">Draft</label>
+            </p>
+            <button type="submit" [disabled]="_storage.isLoading || !updateProduct.valid">Update Data</button>
+        </div>
+        <!-- {{updateProduct.valid|json}} -->
     </form>
     
+    <form [hidden]="!popvariant" #variantForm="ngForm" (ngSubmit)="addVariant(data._variant, variantForm.value);popvariant=!popvariant">
+        <input type="text" name="sku" ngModel required />            
+        <input type="text" name="type" ngModel />
+        <input type="text" name="stock" ngModel />
+        <input type="text" name="price" ngModel />
+        <button type="submit" [disabled]="!variantForm.valid">Add Variant</button>
+        <button type="button" (click)="popvariant=!popvariant">Cancel</button>
+    </form>
 </ng-container>
 
 

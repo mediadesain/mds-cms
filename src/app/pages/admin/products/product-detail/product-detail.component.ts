@@ -15,6 +15,7 @@ export class ProductDetailComponent implements OnInit {
   data : any;
   selection : any = [];
   pop : boolean = false;
+  popvariant : boolean = false;
   
   constructor(
     private route: ActivatedRoute,
@@ -25,37 +26,35 @@ export class ProductDetailComponent implements OnInit {
   
   ngOnInit(): void {
     var url = this.route.snapshot.paramMap.get("url")
-    var reference = { url: '/product', query: true, key: 'url', value: url }
+    var reference = { url: '/v2/products', query: true, key: 'url', value: url }
     this._database.getDatabase(reference).then(
       (val) => {
-        var ArrModified = Object.values(val)
-        ArrModified.forEach((a:any) => {
-          //Parse Media Files
-          if(!a.mediafiles)
-            a.mediafiles = {};
-          
-          var mediafiles_array = Object.values(a.mediafiles.photos);
-          mediafiles_array.forEach( (b:any) => {
-            this._storage.fileUrl('/products/'+a.sku+'/'+b.filename).then( url => {
-              a.mediafiles.photos[b.fileid]._fileurl = url
-            })
-          } )
-          a.mediafiles.videos = a.mediafiles.videos ? youtubeEmbed(a.mediafiles.videos) : null;
-          
-          //Parse Main Thumbnail
-          if(!a._thumbnail)
-            a._thumbnail = {};
-          a._thumbnail.photos = mediafiles_array;
+        var ArrModified:any = Object.values(val)[0]
+        //Parse Media Files
+        if(!ArrModified.mediafiles)
+          ArrModified.mediafiles = {};
 
-          //Parse Variant
-          a._variant = Object.values(a.variant);
-          a._variant.forEach( (b:any)=> {
-            if(b.photos)
-              b._photos = JSON.parse(b.photos) 
-          });
-          a._totalstock = jumblahKan(a._variant.map( (b:any)=>b.stock ));
+        //Parse Variant
+        ArrModified._variant = Object.values(ArrModified.variant);
+        ArrModified._variant.forEach( (b:any)=> {
+          if(b.photos)
+            b._photos = JSON.parse(b.photos) 
         });
-        this.data = ArrModified[0];
+
+        //Parse Main Thumbnail
+        if(!ArrModified._thumbnail)
+          ArrModified._thumbnail = {};
+
+        ArrModified._thumbnail.photos = Object.values(ArrModified.mediafiles.photos);
+        ArrModified._thumbnail.photos.forEach( (b:any) => {
+          this._storage.fileUrl('/products/'+ArrModified.sku+'/'+b.filename).then( url => {
+            ArrModified.mediafiles.photos[b.fileid].fileurl = url
+          })
+        })
+        ArrModified._thumbnail.video = ArrModified.mediafiles.videos ? youtubeEmbed(ArrModified.mediafiles.videos) : null;
+        
+        ArrModified._totalstock = jumblahKan(ArrModified._variant.map( (b:any)=>b.stock ));
+        this.data = ArrModified;
         console.log("Data",this.data)
       }
     )
@@ -67,17 +66,14 @@ export class ProductDetailComponent implements OnInit {
     console.groupEnd()
   };
 
-  addVariant(variant:any){
-    console.log('var');
-    var newdata:any = {
-      photos: [],
-      price: '',
-      sku: '',
-      stock: '',
-      type: ''
-    }
+  addVariant(variant:any, newdata:any){
+    console.log(variant, newdata)
+    newdata['_photos'] = []
     variant.push(newdata)
-  }
+  };
+  removeVariant(){
+    console.log('variant delete')
+  };
 
   checkFileExist(selection: any, x: any) {
     return selection.map((a: any) => a).indexOf(x.filename);
@@ -90,7 +86,7 @@ export class ProductDetailComponent implements OnInit {
   };
 
 
-  uploader(e:any, folderpath:string, databasepath:string, checkingfile:any){
+  fileUpload(e:any, folderpath:string, databasepath:string, checkingfile:any){
     console.log(checkingfile)
     this._storage.uploadFile({
       "files" : e,
@@ -99,25 +95,29 @@ export class ProductDetailComponent implements OnInit {
       "databasecheck" : checkingfile
     })
   };
-  
-  delete(val:string){
+  fileDelete(val:string){
     console.log(val)
-  }
+  };
 
-  updateData(data:any){
+  async updateData(data:any){
     var datafinal = {...data}
+    datafinal._variant.forEach( (val:any,i:number) => {
+      val.photos = JSON.stringify(val._photos)
+      if(i===datafinal._variant.length)
+        delete val._photos
+    });
     datafinal['variant'] = listObject(datafinal._variant, 'sku');
     datafinal['dateupdate'] = new Date().getTime()
     delete datafinal['_variant']
     delete datafinal['_thumbnail']
-    console.log('Source => Final Data',data,'=>', datafinal)
 
     this._database.writeDatabase({
       isShowAlert: true,
-      url: '/product/'+datafinal.sku,
+      url: '/v2/products/'+datafinal.sku,
       type: 'update',
       value : datafinal
     })
+    // console.log('Source =>', data, 'Final Data =>', datafinal)
   };
   
     

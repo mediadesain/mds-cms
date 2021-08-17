@@ -3,17 +3,17 @@
 </ng-container>
 
 <ng-container *ngIf="data">
-    <img [src]="data.thumbnailmain._fileurl"/>
+    <img [src]="data._thumbnail.selected.fileurl"/>
     <br/>
     <div *ngIf="data._variant[selected].photos.length > 1">
-        <span *ngFor="let a of data.thumbnail.photos | filter:{
+        <span *ngFor="let a of data._thumbnail.photos | filter:{
             'filename': data._variant[selected].photos
         }">
-            <a href="javascript:void(0)" (click)="updateMainThumb(data, a)"><img [src]="a._fileurl" style="max-width:150px"/></a>
+            <a href="javascript:void(0)" (click)="updateMainThumb(data, a)"><img [src]="a.fileurl" style="max-width:150px"/></a>
         </span>
     </div>
     
-    <iframe *ngIf="data.mediafiles.videos" [src]="data.mediafiles.videos|safeurl" frameborder="0"></iframe> 
+    <iframe *ngIf="data._thumbnail.video" [src]="data._thumbnail.video|safeurl" frameborder="0"></iframe> 
     
     <div>
         {{data._variant[selected].photos|json}} - {{data._variant[selected].photos.length}} Images
