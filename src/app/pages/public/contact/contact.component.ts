@@ -22,7 +22,10 @@ export class ContactComponent implements OnInit {
     this._database.getDatabase(reference).then(
       (val) => {
         this.data = Object.values(val);
-        this.data.forEach((element:any,key:number) => element.img = 'https://picsum.photos/200/300?random='+ key+1);
+        this.data.forEach((element:any,key:number) => {
+          element.img = 'https://picsum.photos/200/300?random='+ key+1;
+          element.group = element.group.split(',')
+        });
         this.isLoading = false;
         console.log("Sumber data api", this.data);
       }

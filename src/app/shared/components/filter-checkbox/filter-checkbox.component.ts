@@ -18,7 +18,7 @@ import { ActivatedRoute, Router } from '@angular/router';
               [checked]="filter.ischecked"
               (change)="checkBoxFilter(filterSelected, prop, filter.property);filter.ischecked = !filter.ischecked;"
           >
-          <label [for]="prop+i">{{filter.property | titlecase}}</label>
+          <label [for]="prop+i">{{filter.property|titlecase}}</label>
       </div>
     </div>
   </div>
@@ -44,7 +44,7 @@ export class FilterCheckboxComponent implements OnInit {
   filterToCheckbox(){
     this.filterBy.forEach( (prop:any) => {
       var getAllValue = this.data.map( (a:any) => a[prop] )
-      var listval = [...new Set(getAllValue)]
+      var listval = [...new Set(getAllValue.flat())]
       this.filterList[prop] = listval
     })
   }

@@ -15,6 +15,7 @@ export class FilterPipe implements PipeTransform {
     for(let a in keys){
       const key = keys[a];
       const val = values[a];
+      //console.log(key,val)
       items = !Array.isArray(val) ? items.filter( a => a[key].includes(val)) : filterMultiple(items, key, val)
     }
     //console.log('Filter Resut',items)

@@ -81,10 +81,21 @@ export const hitungUnikValue = (data:any) => {
 export const filterMultiple = (data:any, key:any, filterdata:any) => {
     var newdata:any = []
     data.filter( (a:any) => {
-        if(filterdata.indexOf(a[key]) != -1)
-        newdata.push(a)
+        var isArray = Array.isArray(a[key])
+        //If values of key is string
+        if(!isArray){
+            if(filterdata.indexOf(a[key]) != -1)
+                newdata.push(a)
+        }
+        //If values of key is Array
+        if(isArray){
+            a[key].forEach( (val:string) => {
+                if(filterdata.indexOf(val) != -1)
+                    newdata.push(a)
+            });
+        }
     });
-    return newdata
+    return [...new Set(newdata)]
 };
 export const groupSeValue = (arr:any, key:any) => {
     const keyvalue = (a:any) => a[key]
