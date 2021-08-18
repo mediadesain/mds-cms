@@ -1,8 +1,8 @@
 /* Mediadesain Helper
 * Documentation https://bitbucket.org/mediadesain/javascript-mds-doc/src/javascript-mds-doc/
 *
-* Version 1.1.3
-* Last Update 30-Jul-2021 
+* Version 1.1.4
+* Last Update 17-Aug-2021 
 */
 
 // String
@@ -79,18 +79,19 @@ export const hitungUnikValue = (data:any) => {
     return count
 };
 export const filterMultiple = (data:any, key:any, filterdata:any) => {
+    filterdata = filterdata.join().toLocaleLowerCase().split(',')
     var newdata:any = []
     data.filter( (a:any) => {
         var isArray = Array.isArray(a[key])
         //If values of key is string
         if(!isArray){
-            if(filterdata.indexOf(a[key]) != -1)
+            if(filterdata.indexOf(a[key].toLocaleLowerCase()) != -1)
                 newdata.push(a)
         }
         //If values of key is Array
         if(isArray){
             a[key].forEach( (val:string) => {
-                if(filterdata.indexOf(val) != -1)
+                if(filterdata.indexOf(val.toLocaleLowerCase()) != -1)
                     newdata.push(a)
             });
         }
