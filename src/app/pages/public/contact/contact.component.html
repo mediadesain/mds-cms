@@ -27,6 +27,7 @@
         </li>
     </ul>
     <pagination-controls (pageChange)="page = $event"></pagination-controls>
-    <pre>{{filterSelected|json}}</pre>
+    <pre>Filter by: {{filterBy|json}}</pre>
+    <pre>Filter Selected: {{filterSelected|json}}</pre>
     <pre>{{(data|filter:filterSelected)|json}}</pre>
 </ng-container>

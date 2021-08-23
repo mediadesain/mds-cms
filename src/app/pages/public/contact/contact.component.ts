@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { DatabaseService } from 'src/app/shared/services/database.service';
+import { DatabaseService } from 'src/app/shared/services/firebase/database.service';
 
 @Component({
   selector: 'app-contact',

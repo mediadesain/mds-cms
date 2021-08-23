@@ -36,7 +36,8 @@
     <hr/>
 </ng-container>
 
-<pre>Filter: {{filterSelected|json}}</pre>
+<pre>Filter By: {{filterBy|json}}</pre>
+<pre>Filter Selected: {{filterSelected|json}}</pre>
 <pre>
 Auth As: {{_auth.data?.role}}
 Data: {{data?.products|filter:filterSelected|json}}

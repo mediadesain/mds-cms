@@ -42,11 +42,13 @@ export class FilterCheckboxComponent implements OnInit {
   }
 
   filterToCheckbox(){
+    //console.log(this.filterBy) = ['status','gender']
     this.filterBy.forEach( (prop:any) => {
       var getAllValue = this.data.map( (a:any) => a[prop] )
       var listval = [...new Set(getAllValue.flat())]
       this.filterList[prop] = listval
     })
+    //console.log(this.filterList) {'status':['publish'],'gender':['male','female]}
   }
 
   checkByUrl(){
