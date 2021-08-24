@@ -79,21 +79,24 @@ export const hitungUnikValue = (data:any) => {
     return count
 };
 export const filterMultiple = (data:any, key:any, filterdata:any) => {
+    //console.log('FilterMultiple', data, key, filterdata)
     filterdata = filterdata.join().toLocaleLowerCase().split(',')
     var newdata:any = []
     data.filter( (a:any) => {
         var isArray = Array.isArray(a[key])
-        //If values of key is string
-        if(!isArray){
-            if(filterdata.indexOf(a[key].toLocaleLowerCase()) != -1)
-                newdata.push(a)
-        }
-        //If values of key is Array
-        if(isArray){
-            a[key].forEach( (val:string) => {
-                if(filterdata.indexOf(val.toLocaleLowerCase()) != -1)
+        if(a[key]){
+            //If values of key is string
+            if(!isArray){
+                if(filterdata.indexOf(a[key].toLocaleLowerCase()) != -1)
                     newdata.push(a)
-            });
+            }
+            //If values of key is Array
+            if(isArray){
+                a[key].forEach( (val:string) => {
+                    if(filterdata.indexOf(val.toLocaleLowerCase()) != -1)
+                        newdata.push(a)
+                });
+            }
         }
     });
     return [...new Set(newdata)]
