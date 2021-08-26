@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { AuthService } from 'src/app/shared/services/firebase/auth.service';
-import { DatabaseService } from 'src/app/shared/services/firebase/database.service';
-import { StorageService } from 'src/app/shared/services/firebase/storage.service';
+import { AuthService } from 'src/app/shared/services/auth.service';
+import { DatabaseService } from 'src/app/shared/services/database.service';
+import { StorageService } from 'src/app/shared/services/storage.service';
 
 import { jumblahKan, youtubeEmbed } from 'src/app/shared/helper/mds-helper.component';
+import { GetDataInterface } from 'src/app/shared/interfaces/database.interface';
 
 
 @Component({
@@ -27,11 +28,10 @@ export class ProductDetailComponent implements OnInit {
     console.log("Auth", this._auth)
 
     var url = this.route.snapshot.paramMap.get("url")
-    var reference = { url: '/v2/products', query: true, key: 'url', value: url }
+    var reference: GetDataInterface = { isArray: false, url: '/v2/products', query: true, key: 'url', value: url }
     this._database.getDatabase(reference).then(
       (val) => {
-        var ArrModified:any = Object.values(val)[0]
-        console.log(ArrModified)
+        var ArrModified:any = val
         //Parse Media Files
         if(!ArrModified['mediafiles'])
           ArrModified['mediafiles'] = {};

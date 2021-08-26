@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from 'src/app/shared/services/firebase/auth.service';
-import { DatabaseService } from 'src/app/shared/services/firebase/database.service';
+import { AuthService } from 'src/app/shared/services/auth.service';
+import { GetDataInterface } from 'src/app/shared/interfaces/database.interface';
+import { DatabaseService } from 'src/app/shared/services/database.service';
 
 @Component({
   selector: 'app-products',
@@ -21,10 +22,9 @@ export class ProductsComponent implements OnInit {
   }
 
   loadData(){
-    var reference = { url: '/v2/products', query: false}
-    this._database
-      .getDatabase(reference)
-      .then((val:any) => {
+    var reference: GetDataInterface = { isArray: true, url: '/v2/products', query: false}
+    this._database.getDatabase(reference).then(
+      (val:any) => {
         var ArrayModified:any = {};
         console.log(Object.values(val))
         ArrayModified['products'] = Object.values(val).filter( (a:any) => a.status == 'published');

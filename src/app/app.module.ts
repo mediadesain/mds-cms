@@ -12,10 +12,10 @@ import { FooterComponent } from './shared/components/footer/footer.component';
 
 import { environment } from '../environments/environment';
 import firebase from "firebase/app";
-import { AuthService } from './shared/services/firebase/auth.service';
+import { AuthService } from './shared/services/auth.service';
 import { AuthGuardService } from './shared/guard/auth.guard';
-import { DatabaseService } from './shared/services/firebase/database.service';
-import { StorageService } from './shared/services/firebase/storage.service';
+import { DatabaseService } from './shared/services/database.service';
+import { StorageService } from './shared/services/storage.service';
 
 @NgModule({
   declarations: [
