@@ -8,24 +8,25 @@ import { filterMultiple } from '../helper/mds-helper.component';
 
 export class FilterPipe implements PipeTransform {
 	transform(items: any[], filter: any): any[] {
-    //console.log('Filter Comparison',items, filter)
-    if (!items) return [];
+    // console.log('Filter Comparison',items, filter)
+    if (!items) { return []; }
     const keys = Object.keys(filter);
     const values = Object.values(filter);
-    for(let a in keys){
-      const key:string = keys[a];
-      const val:any = values[a];
+    for (const a in keys){
+      const key: string = keys[a];
+      const val: any = values[a];
       // console.log({[key]:val})
       // //items = !Array.isArray(val) ? items.filter( a => a[key].includes(val)) : filterMultiple(items, key, val)
-      if(!Array.isArray(val)){
-        items = items.filter( a => a[key].includes(val))
+      if (!Array.isArray(val)){
+        items = items.filter( a => a[key].includes(val));
       } else {
-        if(val.length > 0)
-          items = filterMultiple(items, key, val)
+        if (val.length > 0) {
+          items = filterMultiple(items, key, val);
+        }
       }
     }
-    //console.log('Filter Resut',items)
-    return items
+    // console.log('Filter Resut',items)
+    return items;
 	}
 }
 

@@ -10,7 +10,7 @@ import { SafeUrlPipe } from './safe-url.pipe';
     SafeUrlPipe
   ],
   imports: [CommonModule],
-  exports:[
+  exports: [
     FilterPipe,
     SafeUrlPipe
   ]
