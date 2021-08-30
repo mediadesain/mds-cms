@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import firebase from 'firebase/app';
 import 'firebase/database';
-import { GetDataInterface, WriteDataInterface } from 'src/app/shared/interfaces/database.interface';
+import { GetDataInterface, WriteDataInterface } from '../interfaces/database.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -25,13 +25,13 @@ export class DatabaseService {
     if (parameter.isArray){
       // List Data
       let Array: any = snapshot.toJSON();
-      Array = Array == null ? [] : Object.values(Array)
+      Array = Array == null ? [] : Object.values(Array);
       return Array;
     } else {
       // Detail Data
       let Obj: any = snapshot.toJSON();
-      Obj = !parameter.query ? Obj : Object.values(Obj)[0]
-      return Obj
+      Obj = !parameter.query ? Obj : Object.values(Obj)[0];
+      return Obj;
     }
   }
 

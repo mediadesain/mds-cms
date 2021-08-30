@@ -16,7 +16,7 @@ export const titleCase = (str: any) => {
     return str.replace(/\b(\w)/g, (k: any) => k.toUpperCase());
 };
 export const pascalCase = (str: any) => {
-    return str.toLowerCase().replace(/[^\w\s]/gi, ' ').replace(/(?:_| |\b)(\w)/g, function(str: any, p1: any) {
+    return str.toLowerCase().replace(/[^\w\s]/gi, ' ').replace(/(?:_| |\b)(\w)/g, (p1: any) => {
     return p1.toUpperCase(); }).replace(/\s/g, '');
 };
 export const randomKarakter = (length: any) => {
@@ -49,8 +49,8 @@ export const youtubeThumbnail = (val: any, size: any) => {
 export const perpendekAngka = (value: any) => {
     const suffixes = ['', 'k', 'm', 'b', 't'];
     const suffixNum = Math.floor(('' + value).length / 3);
-    let shortValue: any = parseFloat((suffixNum != 0 ? (value / Math.pow(1000, suffixNum)) : value).toPrecision(2));
-    if (shortValue % 1 != 0) {
+    let shortValue: any = parseFloat((suffixNum !== 0 ? (value / Math.pow(1000, suffixNum)) : value).toPrecision(2));
+    if (shortValue % 1 !== 0) {
         shortValue = shortValue.toFixed(1);
     }
     return shortValue + suffixes[suffixNum];
@@ -67,7 +67,8 @@ export const hapusObjValKosong = (obj: any) => {
         if (obj[namaProperty] === null || obj[namaProperty] === undefined || obj[namaProperty] === '') {
             delete obj[namaProperty];
         }
-    } return obj;
+    }
+    return obj;
 };
 
 // Array
@@ -87,14 +88,14 @@ export const filterMultiple = (data: any, key: any, filterdata: any) => {
         if (a[key]){
             // If values of key is string
             if (!isArray){
-                if (filterdata.indexOf(a[key].toLocaleLowerCase()) != -1) {
+                if (filterdata.indexOf(a[key].toLocaleLowerCase()) !== -1) {
                     newdata.push(a);
                 }
             }
             // If values of key is Array
             if (isArray){
                 a[key].forEach( (val: string) => {
-                    if (filterdata.indexOf(val.toLocaleLowerCase()) != -1) {
+                    if (filterdata.indexOf(val.toLocaleLowerCase()) !== -1) {
                         newdata.push(a);
                     }
                 });
