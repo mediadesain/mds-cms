@@ -2,16 +2,22 @@
 <ng-container *ngIf="!_auth.isAuth">
     <div *ngIf="pop==''">
         <h3>Login</h3>
-        <form #login="ngForm" (ngSubmit)="masuk(login.value)">
-            <input type="email" placeholder="email" name="email" ngModel required/>
-            <input type="password" placeholder="password" name="password" ngModel required/>
-            <button>Masuk</button>
+        <form #loginForm="ngForm" (ngSubmit)="masuk(loginForm.value)">
+            <input type="email" placeholder="email" name="email" ngModel #email="ngModel" required/>
+            <ng-container *ngIf="email.errors && email.dirty">
+                <span class="input-error" *ngIf="email.errors?.required">Email is required</span>
+            </ng-container>
+            <input type="password" placeholder="password" name="password" ngModel #password="ngModel" required/>
+            <ng-container *ngIf="password.errors && password.dirty">
+                <span class="input-error" *ngIf="password.errors?.required">Password is required</span>
+            </ng-container>
+            <button [disabled]="!loginForm.form.valid">Masuk</button>
         </form>
         <a href="javascript:void(0)" (click)="pop='reset'">Forgot Password</a> | <a href="javascript:void(0)" (click)="pop='register'">Register</a>
     </div>
     <div *ngIf="pop=='reset'">
         <h3>Reset Password</h3>
-        <form #resetPassword="ngForm" (ngSubmit)="resetSandi(resetPassword.value)">
+        <form #resetPasswordForm="ngForm" (ngSubmit)="resetSandi(resetPasswordForm.value)">
             <input type="email" placeholder="email" name="email" ngModel required/>
             <button>Reset</button>
         </form>
@@ -20,9 +26,9 @@
     
     <div *ngIf="pop=='register'">
         <h3>Register</h3>
-        <form #register="ngForm" (ngSubmit)="daftar(register.value)">
-            <input type="email" placeholder="email" name="email" ngModel required/>
-            <input type="password" placeholder="password" name="password" ngModel required/>
+        <form #registerForm="ngForm" (ngSubmit)="daftar(registerForm.value)">
+            <input type="email" placeholder="email" name="email" ngModel/>
+            <input type="password" placeholder="password" name="password" ngModel/>
             <button>Regsiter</button>
         </form>
         <a href="javascript:void(0)" (click)="pop=''">Cancel</a>

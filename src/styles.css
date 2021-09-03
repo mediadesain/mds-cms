@@ -3,5 +3,5 @@ a {text-decoration: none;}
 .active {color: yellowgreen}
 pre { font-size: x-small; background: #f3f3f3; border: 1px solid #ddd; padding: 20px; border-radius: 5px; max-height: 200px; overflow: scroll; }
 
-.ng-invalid:not(form)  { border: 2px solid #a94442; }
-/* .ng-valid[required], .ng-valid.required  { border-left: 1px solid #42A948; } */
+input.ng-invalid.ng-touched  { border: 1px solid red; }
+.input-error { color: red; }

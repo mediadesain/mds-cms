@@ -8,7 +8,9 @@
             <!--.ng-invalid:not(form)  { border: 2px solid #a94442; }
                 .ng-valid[required], .ng-valid.required  { border-left: 1px solid #42A948; }-->
             <input type="text" name="sku" [(ngModel)]="data.sku" #sku="ngModel" required />
-            <i [hidden]="sku.valid">Sku is required</i>
+            <ng-container *ngIf="sku.errors && sku.dirty">
+                <i class="input-error" *ngIf="sku.errors?.required">Sku is required</i>
+            </ng-container>
             <input type="text" name="name" [(ngModel)]="data.name"/>
             <input type="text" name="brand" [(ngModel)]="data.brand"/>
             <input type="text" name="category" [(ngModel)]="data.category"/>
@@ -20,7 +22,10 @@
         
         <div *ngFor="let a of data._variant">
             <a href="javascript:void(0)" (click)="pop = !pop;selection=a._photos">❐ Select</a> <small>{{a._photos.length}} thumbnail/s </small>
-            <input type="text" [(ngModel)]="a.sku" [ngModelOptions]="{standalone: true}" #childSku="ngModel" required />            
+            <input type="text" [(ngModel)]="a.sku" [ngModelOptions]="{standalone: true}" #childSku="ngModel" required />
+            <ng-container *ngIf="childSku.errors && childSku.dirty">
+                <i class="input-error" *ngIf="childSku.errors?.required">Sku is required</i>
+            </ng-container>
             <input type="text" [(ngModel)]="a.type" [ngModelOptions]="{standalone: true}"/>
             <input type="text" [(ngModel)]="a.stock" [ngModelOptions]="{standalone: true}"/>
             <input type="text" [(ngModel)]="a.price" [ngModelOptions]="{standalone: true}"/>
@@ -71,7 +76,10 @@
     </form>
     
     <form [hidden]="!popvariant" #variantForm="ngForm" (ngSubmit)="addVariant(data._variant, variantForm.value);popvariant=!popvariant">
-        <input type="text" name="sku" ngModel required />            
+        <input type="text" name="sku" ngModel #newsku="ngModel" required />  
+        <ng-container *ngIf="newsku.errors && newsku.dirty">
+            <i class="input-error" *ngIf="newsku.errors?.required">Sku is required</i>
+        </ng-container>          
         <input type="text" name="type" ngModel />
         <input type="text" name="stock" ngModel />
         <input type="text" name="price" ngModel />
