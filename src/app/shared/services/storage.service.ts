@@ -9,7 +9,7 @@ import "firebase/storage";
 export class StorageService {
     status:number[]=[];
     isLoading:boolean = false;
-    constructor(private _database: DatabaseService) {}
+    constructor(private databaseSrvc: DatabaseService) {}
 
     fileUrl(path:string){
         return new Promise( (resolve, reject)=> {
@@ -43,7 +43,7 @@ export class StorageService {
                         if(checkfileid >= 0) filedatabase['fileid'] = exsistfile[checkfileid].fileid
                         else filedatabase['fileid'] = randomKarakter(20)
                         filedatabase['filename'] = files[i].name
-                        this._database.writeDatabase({
+                        this.databaseSrvc.writeDatabase({
                             url: detailupload.databasepath+'/'+filedatabase.fileid,
                             value: filedatabase,
                             type: 'put',

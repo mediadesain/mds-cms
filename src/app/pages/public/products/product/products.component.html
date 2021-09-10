@@ -8,7 +8,7 @@
     <div style="display: flex;flex-direction: row;justify-content: space-around;width: 70%;">
         <filter-checkbox style="display: flex;flex-direction: row;justify-content: space-around;width: 70%;"
             Title="Filter by"
-            [ListModel] ="data.products"
+            [data] ="data.products"
             [FilterModel]="filterBy"
             [FilteredModel]="filterSelected">
         </filter-checkbox>

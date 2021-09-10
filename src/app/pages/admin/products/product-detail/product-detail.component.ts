@@ -21,14 +21,14 @@ export class ProductDetailComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     public _auth: AuthService,
-    private _database: DatabaseService,
-    public _storage: StorageService
+    private databaseSrvc: DatabaseService,
+    public storageSrvc: StorageService
   ) {}
   
   ngOnInit(): void {
     var url = this.route.snapshot.paramMap.get("url")
     var reference: GetDataInterface = { isArray: false, url: '/v2/products', query: true, key: 'url', value: url }
-    this._database.getDatabase(reference).then(
+    this.databaseSrvc.getDatabase(reference).then(
       (val) => {
         var ArrModified:any = val
 
@@ -49,7 +49,7 @@ export class ProductDetailComponent implements OnInit {
 
         ArrModified._thumbnail.photos = Object.values(ArrModified.mediafiles.photos);
         ArrModified._thumbnail.photos.forEach( (b:any) => {
-          this._storage.fileUrl('/products/'+ArrModified.sku+'/'+b.filename).then( url => {
+          this.storageSrvc.fileUrl('/products/'+ArrModified.sku+'/'+b.filename).then( url => {
             ArrModified.mediafiles.photos[b.fileid].fileurl = url
           })
         })
@@ -62,8 +62,8 @@ export class ProductDetailComponent implements OnInit {
     )
     console.group('Product Detail Page - Admin')
       console.log("Auth",this._auth)
-      console.log("Database Service",this._database);
-      console.log("Storage Service",this._storage);
+      console.log("Database Service",this.databaseSrvc);
+      console.log("Storage Service",this.storageSrvc);
     console.groupEnd()
   };
 
@@ -89,7 +89,7 @@ export class ProductDetailComponent implements OnInit {
 
   fileUpload(e:any, folderpath:string, databasepath:string, checkingfile:any){
     console.log(checkingfile)
-    this._storage.uploadFile({
+    this.storageSrvc.uploadFile({
       "files" : e,
       "folderpath" : folderpath,
       "databasepath" : databasepath,
@@ -112,7 +112,7 @@ export class ProductDetailComponent implements OnInit {
     delete datafinal['_variant']
     delete datafinal['_thumbnail']
 
-    this._database.writeDatabase({
+    this.databaseSrvc.writeDatabase({
       isShowAlert: true,
       url: '/v2/products/'+datafinal.sku,
       type: 'update',

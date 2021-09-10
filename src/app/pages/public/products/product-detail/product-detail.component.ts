@@ -20,8 +20,8 @@ export class ProductDetailComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     public _auth: AuthService,
-    private _database: DatabaseService,
-    public _storage: StorageService
+    private databaseSrvc: DatabaseService,
+    public storageSrvc: StorageService
   ) { }
 
   ngOnInit() {
@@ -29,7 +29,7 @@ export class ProductDetailComponent implements OnInit {
 
     var url = this.route.snapshot.paramMap.get("url")
     var reference: GetDataInterface = { isArray: false, url: '/v2/products', query: true, key: 'url', value: url }
-    this._database.getDatabase(reference).then(
+    this.databaseSrvc.getDatabase(reference).then(
       (val) => {
         var ArrModified:any = val
         //Parse Media Files
@@ -49,7 +49,7 @@ export class ProductDetailComponent implements OnInit {
 
         ArrModified['_thumbnail'].photos = Object.values(ArrModified['mediafiles'].photos);
         ArrModified['_thumbnail'].photos.forEach( (b:any,i:number) => {
-          this._storage.fileUrl('/products/'+ArrModified.sku+'/'+b.filename).then( url => {
+          this.storageSrvc.fileUrl('/products/'+ArrModified.sku+'/'+b.filename).then( url => {
             ArrModified['_thumbnail'].photos[i].fileurl = url
           })
         })

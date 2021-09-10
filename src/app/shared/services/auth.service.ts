@@ -29,15 +29,29 @@ export class AuthService {
     this.getDataAuth()
   }
 
-  getUid(): Promise<any> {
-    return new Promise<any>((resolve, reject) => {
-      firebase.auth().onAuthStateChanged( (auth:any) => {
-        if(auth){
-          resolve(auth.uid);
-        } else resolve('')
+  registerAccount(value:AuthData){
+    firebase.auth().createUserWithEmailAndPassword(value.email, value.password)
+      .then( (succsess) => {
+        if(succsess.user){
+          value.uid = succsess.user.uid;
+          value.password = null;
+          firebase.database().ref('users/' + value.uid).set(value);
+        }
       })
-    });
+      .catch( (error) => this.message = error.message );
   }
+  
+  signIn(value:AuthData){
+    firebase.auth().signInWithEmailAndPassword(value.email,value.password)
+      .then( (auth) => {
+        firebase.database().ref('users/'+auth.user?.uid).update({"datelogin": new Date().getTime()});
+        this.message = 'Signin success';
+      })
+      .catch( (error) => {
+        alert(error.message)
+        this.message = error.message
+      });
+  };
 
   getDataAuth(){
     firebase.auth().onAuthStateChanged( (auth) => {
@@ -64,17 +78,13 @@ export class AuthService {
     value['dateupdate'] = new Date().getTime();
     firebase.database().ref('users/' + value.uid).set(value);
   }
-  
-  signIn(value:AuthData){
-    firebase.auth().signInWithEmailAndPassword(value.email,value.password)
-      .then( (auth) => {
-        firebase.database().ref('users/'+auth.user?.uid).update({"datelogin": new Date().getTime()});
-        this.message = 'Signin success';
+
+  resetPassword(email:string){
+    firebase.auth().sendPasswordResetEmail(email)
+      .then( (success) => {
+        this.message = 'Reset Password Link has been sent to your email';
       })
-      .catch( (error) => {
-        alert(error.message)
-        this.message = error.message
-      });
+      .catch( (error) => this.message = error.message );
   };
 
   signOut(){
@@ -87,24 +97,14 @@ export class AuthService {
       .catch( (error) => this.message = error.message);
   };
 
-  resetPassword(email:string){
-    firebase.auth().sendPasswordResetEmail(email)
-      .then( (success) => {
-        this.message = 'Reset Password Link has been sent to your email';
+  getUid(): Promise<any> {
+    return new Promise<any>((resolve, reject) => {
+      firebase.auth().onAuthStateChanged( (auth:any) => {
+        if(auth){
+          resolve(auth.uid);
+        } else resolve('')
       })
-      .catch( (error) => this.message = error.message );
-  };
-
-  registerAccount(value:AuthData){
-    firebase.auth().createUserWithEmailAndPassword(value.email, value.password)
-      .then( (succsess) => {
-        if(succsess.user){
-          value.uid = succsess.user.uid;
-          value.password = null;
-          firebase.database().ref('users/' + value.uid).set(value);
-        }
-      })
-      .catch( (error) => this.message = error.message );
+    });
   }
   
   hideMessage(){

@@ -26,7 +26,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class FilterCheckboxComponent implements OnInit {
   @Input() Title:any;
-  @Input('ListModel') data:any;
+  @Input() data:any;
   @Input('FilterModel') filterBy:any;
   filterList:any = {}
   @Input('FilteredModel') filterSelected:any;
@@ -37,6 +37,7 @@ export class FilterCheckboxComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    console.log('zxczxczxczxczxczxczxc', this.data)
     this.filterToCheckbox()
     this.checkByUrl()
   }

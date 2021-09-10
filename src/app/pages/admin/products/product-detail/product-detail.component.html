@@ -51,10 +51,10 @@
             <input [hidden]="true" type="text" name="_thumbnail" [(ngModel)]="data._thumbnail.photos">
             <i>{{selection.length}} thumbnail image/s selected</i><br/>
             <!--accept="image/*"
-            {{_storage.status|json}}-->
+            {{storageSrvc.status|json}}-->
             <small>
                 <ul>
-                    <li *ngFor="let x of _storage.status">
+                    <li *ngFor="let x of storageSrvc.status">
                         <ng-container *ngIf="x < 100">uploading {{x}}%</ng-container>
                         <ng-container *ngIf="x >= 100">File has been uploaded</ng-container>
                     </li>
@@ -70,7 +70,7 @@
                 <input id="status2" type="radio" name="status" [(ngModel)]="data.status" [value]="'unlisted'" /> <label for="status2">Unlisted</label>
                 <input id="status3" type="radio" name="status" [(ngModel)]="data.status" [value]="'draft'" /> <label for="status3">Draft</label>
             </p>
-            <button type="submit" [disabled]="_storage.isLoading || !updateProduct.valid">Update Data</button>
+            <button type="submit" [disabled]="storageSrvc.isLoading || !updateProduct.valid">Update Data</button>
         </div>
         <!-- {{updateProduct.valid|json}} -->
     </form>

@@ -14,7 +14,7 @@ export class ProductsComponent implements OnInit {
 
   constructor(
     public _auth: AuthService,
-    private _database: DatabaseService
+    private databaseSrvc: DatabaseService
   ) {}
 
   ngOnInit(): void {
@@ -23,7 +23,7 @@ export class ProductsComponent implements OnInit {
 
   loadData(){
     var reference: GetDataInterface = { isArray: true, url: '/v2/products', query: false}
-    this._database.getDatabase(reference).then(
+    this.databaseSrvc.getDatabase(reference).then(
       (val:any) => {
         var ArrayModified:any = {};
         console.log(Object.values(val))

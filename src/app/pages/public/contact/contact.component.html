@@ -1,14 +1,14 @@
 <p>contact works!</p>
 
-<ng-container *ngIf="isLoading">Loading</ng-container>
+<ng-container *ngIf="userSrvc.databaseSrvc.isloading">Loading</ng-container>
 
-<ng-container *ngIf="data">
+<ng-container *ngIf="!userSrvc.databaseSrvc.isloading">
     <!--Filter List-->
     <hr/>
     <div style="display: flex;flex-direction: row;justify-content: space-around;width: 70%;">
         <filter-checkbox style="display: flex;flex-direction: row;justify-content: space-around;width: 70%;"
             Title="Filter by"
-            [ListModel] ="data"
+            [data] ="userSrvc.data"
             [FilterModel]="filterBy"
             [FilteredModel]="filterSelected">
         </filter-checkbox>
@@ -17,11 +17,11 @@
 </ng-container>
 
 
-<ng-container *ngIf="data?.length == 0">No Data Found</ng-container>
-<ng-container *ngIf="data">
-    <ng-container *ngIf="data?.length > 0">Total Item/s {{(data|filter:filterSelected).length}}</ng-container>
+<ng-container *ngIf="!userSrvc.databaseSrvc.isloading && userSrvc.data?.length == 0">No data Found</ng-container>
+<ng-container *ngIf="!userSrvc.databaseSrvc.isloading && userSrvc.data">
+    <!-- <ng-container *ngIf="userSrvc.data?.length > 0">Total Item/s {{(userSrvc.data|filter:filterSelected).length}}</ng-container> -->
     <ul>
-        <li *ngFor="let a of (data|filter:filterSelected) | paginate: {itemsPerPage: 10, currentPage: page}; let i = index">
+        <li *ngFor="let a of (userSrvc.data|filter:filterSelected) | paginate: {itemsPerPage: 10, currentPage: page}; let i = index">
             <p>{{a.firstName +' '+ a.lastName}} - {{a.gender}} - {{a.status}} - {{a.group}}</p>
             <img [src]="a.img" style="width: 100px;"/>
         </li>
@@ -29,5 +29,5 @@
     <pagination-controls (pageChange)="page = $event"></pagination-controls>
     <pre>Filter by: {{filterBy|json}}</pre>
     <pre>Filter Selected: {{filterSelected|json}}</pre>
-    <pre>{{(data|filter:filterSelected)|json}}</pre>
+    <pre>{{(userSrvc.data|filter:filterSelected)|json}}</pre>
 </ng-container>
