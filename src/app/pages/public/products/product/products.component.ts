@@ -13,7 +13,7 @@ export class ProductsComponent implements OnInit {
   filterSelected : any = {};
 
   constructor(
-    public _auth: AuthService,
+    public authSrvc: AuthService,
     private databaseSrvc: DatabaseService
   ) {}
 
@@ -32,7 +32,7 @@ export class ProductsComponent implements OnInit {
         this.data = ArrayModified;
 
         console.group('Product Page')
-          console.log("Auth",this._auth)
+          console.log("Auth",this.authSrvc)
           console.log("Data List",this.data);
         console.groupEnd()
       })

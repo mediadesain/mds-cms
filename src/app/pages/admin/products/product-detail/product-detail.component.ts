@@ -20,7 +20,7 @@ export class ProductDetailComponent implements OnInit {
   
   constructor(
     private route: ActivatedRoute,
-    public _auth: AuthService,
+    public authSrvc: AuthService,
     private databaseSrvc: DatabaseService,
     public storageSrvc: StorageService
   ) {}
@@ -61,7 +61,7 @@ export class ProductDetailComponent implements OnInit {
       }
     )
     console.group('Product Detail Page - Admin')
-      console.log("Auth",this._auth)
+      console.log("Auth",this.authSrvc)
       console.log("Database Service",this.databaseSrvc);
       console.log("Storage Service",this.storageSrvc);
     console.groupEnd()

@@ -19,13 +19,13 @@ export class ProductDetailComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    public _auth: AuthService,
+    public authSrvc: AuthService,
     private databaseSrvc: DatabaseService,
     public storageSrvc: StorageService
   ) { }
 
   ngOnInit() {
-    console.log("Auth", this._auth)
+    console.log("Auth", this.authSrvc)
 
     var url = this.route.snapshot.paramMap.get("url")
     var reference: GetDataInterface = { isArray: false, url: '/v2/products', query: true, key: 'url', value: url }

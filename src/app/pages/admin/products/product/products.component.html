@@ -39,7 +39,7 @@
 <pre>Filter By: {{filterBy|json}}</pre>
 <pre>Filter Selected: {{filterSelected|json}}</pre>
 <pre>
-Auth As: {{_auth.data?.role}}
+Auth As: {{authSrvc.data?.role}}
 Data: {{data?.products|filter:filterSelected|json}}
 Status: {{data?.status|json}}
 </pre>
