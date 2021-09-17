@@ -43,13 +43,16 @@ export class DatabaseService {
 
   writeDatabase(parameter: WriteDataInterface){
     console.log(parameter);
-
+    this.isloading = true;
     if (parameter.type === 'set'){
       console.log('set data');
       firebase.database().ref(parameter.url).set(parameter.value,
         (error) => {
           if (error) { console.log(error); }
-          else { parameter.isShowAlert && this.alertSuccess(); }
+          else {
+            parameter.isShowAlert && this.alertSuccess();
+            this.isloading = false;
+          }
         }
       );
     }
@@ -58,7 +61,10 @@ export class DatabaseService {
       firebase.database().ref(parameter.url).update(parameter.value,
         (error) => {
           if (error) { console.log(error); }
-          else { parameter.isShowAlert && this.alertSuccess(); }
+          else {
+            parameter.isShowAlert && this.alertSuccess();
+            this.isloading = false;
+          }
         }
       );
     }
