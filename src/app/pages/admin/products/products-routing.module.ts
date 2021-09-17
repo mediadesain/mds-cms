@@ -6,7 +6,7 @@ import { ProductsComponent } from './product/products.component';
 
 const routes: Routes = [
   { path: '', component: ProductsComponent },
-  { path: ':url', component: ProductDetailComponent },
+  { path: ':url', component: ProductDetailComponent, data: {title: 'Custom CMS - Detail Produk'} },
 ];
 
 @NgModule({

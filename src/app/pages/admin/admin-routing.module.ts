@@ -9,12 +9,12 @@ import { LoginComponent } from 'src/app/shared/components/auth/auth.component';
 
 const routes: Routes = [
     { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
-    { path: 'dashboard', component: HomeComponent },
-    { path: 'order', component: OrderComponent },
-    { path: 'product', loadChildren: () => import('./products/products.module').then(m => m.ProductsModule) },
-    { path: 'services', component: OurServiceComponent },
-    { path: 'account', component: LoginComponent },
-    { path: '404', component: ErrorPageComponent},
+    { path: 'dashboard', component: HomeComponent, data: {title: 'Custom CMS - Dashbaord'} },
+    { path: 'order', component: OrderComponent, data: {title: 'Custom CMS - Order'} },
+    { path: 'product', loadChildren: () => import('./products/products.module').then(m => m.ProductsModule), data: {title: 'Custom CMS - Products'} },
+    { path: 'services', component: OurServiceComponent, data: {title: 'Custom CMS - Layanan'} },
+    { path: 'account', component: LoginComponent, data: {title: 'Custom CMS - Akun Saya'} },
+    { path: '404', component: ErrorPageComponent, data: {title: 'Custom CMS - Halaman Tidak Ditemukan'} },
     { path: '**', redirectTo: '404'}
 ];
 
@@ -22,4 +22,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class AdminRoutingModule { }
+export class AdminRoutingModule {}
