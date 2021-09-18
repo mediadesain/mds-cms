@@ -16,13 +16,15 @@ import { AuthService } from './shared/services/auth.service';
 import { AuthGuardService } from './shared/guard/auth.guard';
 import { DatabaseService } from './shared/services/database.service';
 import { StorageService } from './shared/services/storage.service';
+import { OfflineMessageComponent } from './shared/components/offline-message/offline-message.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     MenubarComponent,
-    FooterComponent
+    FooterComponent,
+    OfflineMessageComponent
   ],
   imports: [
     BrowserModule,
