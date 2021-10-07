@@ -16,7 +16,6 @@ export class FilterPipe implements PipeTransform {
       const key: string = keys[a];
       const val: any = values[a];
       // console.log({[key]:val})
-      // //items = !Array.isArray(val) ? items.filter( a => a[key].includes(val)) : filterMultiple(items, key, val)
       if (!Array.isArray(val)){
         items = items.filter( a => a[key].includes(val));
       } else {
@@ -24,13 +23,14 @@ export class FilterPipe implements PipeTransform {
           items = filterMultiple(items, key, val);
         }
       }
+      // items = !Array.isArray(val) ? items.filter( a => a[key].includes(val)) : filterMultiple(items, key, val)
     }
     // console.log('Filter Resut',items)
     return items;
 	}
 }
 
-/* Documentation Filter Pipe by MediaDesain
+/* Document Filter Pipe Summarized by MediaDesain
   Items is loop of array item and filter is item will show. Makesure format filter like this example
   const items = [
     {category:'A', type:'food'},
@@ -39,11 +39,15 @@ export class FilterPipe implements PipeTransform {
     {category:'A', type:'drink'},
     {category:'B', type:'snack'}
   ]
-  const filter = {
+  const filteritems = {
     category:['A','B'],
     type:['food', 'drink']
   }
-  Output = [
+  <ul>
+    <li *ngFor="let item of (items|filter:filteritems)"> ... </li>
+  </ul>
+
+  Output [
     {category:'A', type:'food'},
     {category:'B', type:'drink'},
     {category:'A', type:'drink'}
