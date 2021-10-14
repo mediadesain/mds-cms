@@ -1,7 +1,14 @@
-<p>contact works!</p>
+<!--========= ISLOADING =========-->
+<ng-container *ngIf="userSrvc.databaseSrvc.isloading">
+    <!--Filter List-->
+    <hr/>
+    Loading Filter
+    <hr/>
+    <!--Data List-->
+    Loading Content
+</ng-container>
 
-<ng-container *ngIf="userSrvc.databaseSrvc.isloading">Loading</ng-container>
-
+<!--========= LOADING DONE =========-->
 <ng-container *ngIf="!userSrvc.databaseSrvc.isloading">
     <!--Filter List-->
     <hr/>
@@ -14,20 +21,21 @@
         </filter-checkbox>
     </div>
     <hr/>
+    <!--Data List-->
+    <ng-container *ngIf="userSrvc.data.length == 0">No data Found</ng-container>
+    <ng-container *ngIf="userSrvc.data">
+        Total Item/s {{(userSrvc.data|filter:filterSelected).length}}
+        <ul style="display: flex; flex-direction: row; flex-wrap: wrap;">
+            <li *ngFor="let a of (userSrvc.data|filter:filterSelected) | paginate: {itemsPerPage: 12, currentPage: page}; let i = index" style="flex: 1 0 21%;">
+                <p>{{a.firstName +' '+ a.lastName}} - {{a.gender}} - {{a.status}} - {{a.group}}</p>
+                <img [src]="a.img" style="width: 100px;"/>
+            </li>
+        </ul>
+        <pagination-controls (pageChange)="page = $event"></pagination-controls>
+    </ng-container>
 </ng-container>
 
 
-<ng-container *ngIf="!userSrvc.databaseSrvc.isloading && userSrvc.data?.length == 0">No data Found</ng-container>
-<ng-container *ngIf="!userSrvc.databaseSrvc.isloading && userSrvc.data">
-    <!-- <ng-container *ngIf="userSrvc.data?.length > 0">Total Item/s {{(userSrvc.data|filter:filterSelected).length}}</ng-container> -->
-    <ul>
-        <li *ngFor="let a of (userSrvc.data|filter:filterSelected) | paginate: {itemsPerPage: 10, currentPage: page}; let i = index">
-            <p>{{a.firstName +' '+ a.lastName}} - {{a.gender}} - {{a.status}} - {{a.group}}</p>
-            <img [src]="a.img" style="width: 100px;"/>
-        </li>
-    </ul>
-    <pagination-controls (pageChange)="page = $event"></pagination-controls>
-    <pre>Filter by: {{filterBy|json}}</pre>
-    <pre>Filter Selected: {{filterSelected|json}}</pre>
-    <pre>{{(userSrvc.data|filter:filterSelected)|json}}</pre>
-</ng-container>
+<pre>Filter by: {{filterBy|json}}</pre>
+<pre>Filter Selected: {{filterSelected|json}}</pre>
+<pre>{{(userSrvc.data|filter:filterSelected)|json}}</pre>
