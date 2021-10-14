@@ -19,4 +19,4 @@ Multiple Filter Checkbox Component
 | [FilterModel] | Object | List Keys from Array will use filter function |
 | [FilteredModel] | Object | List Key & Values Selected |
 
-`Make sure use filter.pipe by mediadesain`
+`Make sure use filter.pipe summarize by mediadesain`
