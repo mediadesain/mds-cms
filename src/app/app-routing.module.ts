@@ -13,7 +13,7 @@ const routes: Routes = [
   { path: 'layanan', loadChildren: () => import('./pages/public/our-services/our-services.module').then(m => m.OurServicesModule), data: {title: 'Custom CMS - Our Services'} },
   { path: 'produk', loadChildren: () => import('./pages/public/products/products.module').then(m => m.ProductsModule), data: {title: 'Custom CMS - Produk'} },
   { path: 'tentang-kami', loadChildren: () => import('./pages/public/about/about.module').then(m => m.AboutModule), data: {title: 'Custom CMS - Tentang Kami'} },
-  { path: 'employees', loadChildren: () => import('./pages/public/employees/employees.module').then(m => m.EmployeesModule) },
+  { path: 'employees', loadChildren: () => import('./pages/public/employees/employees.module').then(m => m.EmployeesModule), data: {title: 'Custom CMS - Employees'} },
   { path: 'hubungi-kami', loadChildren: () => import('./pages/public/contact/contact.module').then(m => m.ContactModule), data: {title: 'Custom CMS - Hubungi Kami'} },
   { path: 'account', component: LoginComponent, data: {title: 'Custom CMS - Akun'} },
   {
