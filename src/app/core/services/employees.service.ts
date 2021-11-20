@@ -6,7 +6,7 @@ import { StorageService } from 'src/app/shared/services/firebase-storage.service
 @Injectable({
   providedIn: 'root',
 })
-export class UsersService {
+export class EmployeesService {
 
   data: any[] = []; // Partial data will showing on page
   
