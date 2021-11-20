@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from 'src/app/shared/services/auth.service';
+import { AuthService } from 'src/app/shared/services/firebase-auth.service';
 import { GetDataInterface } from 'src/app/shared/interfaces/database.interface';
-import { DatabaseService } from 'src/app/shared/services/database.service';
+import { DatabaseService } from 'src/app/shared/services/firebase-database.service';
 
 @Component({
   selector: 'app-products',

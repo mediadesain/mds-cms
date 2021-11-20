@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { randomKarakter } from '../helper/mds-helper.component';
-import { DatabaseService } from './database.service';
+import { DatabaseService } from './firebase-database.service';
 
 import firebase from "firebase/app";
 import "firebase/storage";

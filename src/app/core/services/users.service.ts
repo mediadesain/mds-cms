@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { GetDataInterface } from 'src/app/shared/interfaces/database.interface';
-import { DatabaseService } from 'src/app/shared/services/database.service';
-import { StorageService } from 'src/app/shared/services/storage.service';
+import { DatabaseService } from 'src/app/shared/services/firebase-database.service';
+import { StorageService } from 'src/app/shared/services/firebase-storage.service';
 
 @Injectable({
   providedIn: 'root',
