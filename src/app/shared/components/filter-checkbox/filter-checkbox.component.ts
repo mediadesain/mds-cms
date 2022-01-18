@@ -1,123 +1,104 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-
+import { konfersiURLslug } from '../../helper/mds-helper.component';
+import { CheckBoxModelInterface, FilterModelInterface, FilterSelectedInterface } from './filter-checkbox.interface';
 @Component({
   selector: 'filter-checkbox',
-  template: `
-  <div *ngFor="let prop of filterBy">
-    <div class="filter-header">
-      {{Title +' '+ prop|titlecase}}
-      <a *ngIf="filterSelected[prop]" href="javascript:void(0)" (click)="resetFilter(filterList,filterSelected,prop)">✕</a>
-    </div>
-    <div class="filter-content" *ngIf="filterList">
-      <div *ngFor="let filter of filterList[prop]; let i = index">
-          <input
-              [id]="prop+i"
-              type="checkbox"
-              [value]="filter.property"
-              [checked]="filter.ischecked"
-              (change)="checkBoxFilter(filterSelected, prop, filter.property);filter.ischecked = !filter.ischecked;"
-          >
-          <label [for]="prop+i">{{filter.property|titlecase}}</label>
-      </div>
-    </div>
-  </div>
-  <div><button *ngIf="(filterSelected|json) != '{}'" (click)="resetAll(filterList,filterSelected, filterBy)">Reset All</button></div><!--filterSelected={}-->`
+  templateUrl: 'filter-checkbox.component.html'
 })
-export class FilterCheckboxComponent implements OnInit {
-  @Input() Title:any;
-  @Input() data:any;
-  @Input('FilterModel') filterBy:any;
-  filterList:any = {}
-  @Input('FilteredModel') filterSelected:any;
 
+export class FilterCheckboxComponent implements OnInit {
+  @Input() Title: string | undefined;
+  @Input() data: any;
+  @Input('FilterModel') filterBy!: string[];
+  @Input('FilteredModel') filterSelected!: FilterSelectedInterface;
+  filterList: FilterModelInterface = {}
+  filterSelectedUrl: FilterSelectedInterface = {};
+  
   constructor(
     public router: Router,
     public activeroute: ActivatedRoute
-  ) { }
+  ) {
+  }
 
   ngOnInit(): void {
-    console.log('zxczxczxczxczxczxczxc', this.data)
-    this.filterToCheckbox()
-    this.checkByUrl()
+    this.filterToCheckbox();
   }
 
   filterToCheckbox(){
-    //console.log(this.filterBy) = ['status','gender']
-    this.filterBy.forEach( (prop:any) => {
-      var getAllValue = this.data.map( (a:any) => a[prop] )
-      var listval = [...new Set(getAllValue.flat())]
-      this.filterList[prop] = listval
-    })
-    //console.log(this.filterList) {'status':['publish'],'gender':['male','female]}
+    this.filterBy.forEach( (prop: string) => {
+      // Create Filter Model
+      const getAllValue = this.data.map( (item:any) => item[prop] );
+      const listval = [...new Set(getAllValue.flat())];
+      const convertcheckbox:any = [];
+      listval.forEach( (val: any) => {
+        const obj:any = {};
+        obj['text'] = val;
+        obj['value'] = konfersiURLslug(val);
+        if(!obj['ischecked'])
+          obj['ischecked'] = false;
+        this.activeroute.queryParams.subscribe( param => {
+          if(param[prop]){
+            const isArray = param[prop].includes(',');
+            const checkArrOrStr = isArray ? param[prop].split(',') : [param[prop]];
+            const isInclude = checkArrOrStr.map( (a: string) => a === obj['value']).includes(true);
+            obj['ischecked']= isInclude ? true : false;
+          }
+        });
+        convertcheckbox.push(obj);
+      })
+      this.filterList[prop] = convertcheckbox;
+      // Selected Filter Model
+      setTimeout( () => {
+        this.filterSelected[prop] = this.filterList[prop].filter((a)=>a.ischecked).map((a:any)=>a.text);
+        this.filterSelectedUrl[prop] = this.filterList[prop].filter((a)=>a.ischecked).map((a)=>a.value);
+        if(this.filterSelected[prop].length == 0)
+          delete this.filterSelected[prop]
+      }, 500);
+    });
   }
 
-  checkByUrl(){
-    if(this.filterList){
-      this.filterBy.forEach( (prop:string) => {
-        var check:any = []
-        this.filterList[prop].forEach( (val:string) => {
-          var obj:any = {}
-          obj['property']= val;
-          this.activeroute.queryParams.subscribe( param => {
-            if(param[prop] != undefined){
-              var checkArrOrStr = param[prop].includes(',') ? param[prop].split(',') : [param[prop]]
-              var isInclude = checkArrOrStr.map((a:any)=>a === val).includes(true)
-              obj['ischecked']= isInclude ? true : false
-            }
-          })
-          check.push(obj)
-        });
-        this.filterList[prop] = check;
-      });
 
-      //this.filterSelected = {};
-      setTimeout(()=>{
-        this.filterBy.forEach( (prop:string) => {
-          this.filterSelected[prop] = this.filterList[prop].filter((a:any)=>a.ischecked).map((a:any)=>a.property)
-          if(this.filterSelected[prop].length == 0)
-            delete this.filterSelected[prop]
-        });
-      }, 500)
-    }
-  }
-
-  checkBoxFilter(filterSelected:any, prop:string, val:string) {
+  checkBoxFilter(filterSelected: FilterSelectedInterface, filterSelectedUrl: FilterSelectedInterface, prop: string, select: CheckBoxModelInterface) {
     // ----- IF URL PARAMETER EMPTY ----- //
+    if (!filterSelected[prop] || !filterSelectedUrl[prop]) {
+      filterSelected[prop] = []
+      filterSelectedUrl[prop] = []
+    }
     this.router.navigate([], { 
-      queryParams: {[prop]: val},
+      queryParams: {[prop]: select.value},
       queryParamsHandling: 'merge'
     })
-    if(filterSelected[prop] == undefined)
-      filterSelected[prop] = []
 
     // ----- IF URL PARAMETER EXSIEST ----- //
-    var idx = filterSelected[prop].indexOf(val)
+    const idx = filterSelected[prop].indexOf(select.text)
     if (idx > -1) {
       // Remove param value/s
-      filterSelected[prop].splice(idx, 1)
-      // Delete Param Key if no value/s
-      if(filterSelected[prop].length==0)
+      filterSelected[prop].splice(idx, 1);
+      filterSelectedUrl[prop].splice(idx, 1);
+      // Delete property if value/s empty
+      if (filterSelected[prop].length == 0 || filterSelectedUrl[prop].length == 0) {
         delete filterSelected[prop]
-
+        delete filterSelectedUrl[prop]
+      }
       // Remove to url queryParam
       this.router.navigate([], { 
-        queryParams: {[prop]: filterSelected[prop] ? filterSelected[prop].join() : null},
+        queryParams: {[prop]: filterSelectedUrl[prop] ? filterSelectedUrl[prop].join() : null},
         queryParamsHandling: 'merge'
       })
-    }
-    else {
-      // Add param value/s
-      filterSelected[prop].push(val)
+    } else {
+      // Add property value/s
+      filterSelectedUrl[prop],filterSelected[prop].push(select.text);
+      filterSelectedUrl[prop].push(select.value);
       // Add to url queryParam
       this.router.navigate([], { 
-        queryParams: {[prop]: filterSelected[prop].join()},
+        queryParams: {[prop]: filterSelectedUrl[prop].join()},
         queryParamsHandling: 'merge'
       })
     }
   }
 
-  resetFilter(filter:any, filterSelected:any, prop:string){
+  resetFilter(filter: FilterModelInterface, filterSelected: FilterSelectedInterface, prop:string){
     filter[prop].forEach( (a:any) => a.ischecked = false );
     delete filterSelected[prop]
     this.router.navigate([], { 
@@ -126,7 +107,7 @@ export class FilterCheckboxComponent implements OnInit {
     })
   }
 
-  resetAll(filter:any, filterSelected:any, props:string[]){
+  resetAll(filter: FilterModelInterface, filterSelected: FilterSelectedInterface, props:string[]){
     props.forEach( (prop) => {
       filter[prop].forEach( (a:any) => a.ischecked = false);
       delete filterSelected[prop]
