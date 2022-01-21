@@ -4,8 +4,7 @@ import { CommonModule } from '@angular/common';
 import { EmployeesRoutingModule } from './employees-routing.module';
 import { EmployeesComponent } from './employees.component';
 import { NgxPaginationModule } from 'ngx-pagination';
-import { SharedModule } from 'src/app/shared/shared.module';
-
+import { MdsFilterCheckboxModule, MdsPipesModule } from 'mds-library';
 
 @NgModule({
   declarations: [
@@ -14,7 +13,8 @@ import { SharedModule } from 'src/app/shared/shared.module';
   imports: [
     CommonModule,
     EmployeesRoutingModule,
-    SharedModule,
+    MdsFilterCheckboxModule,
+    MdsPipesModule,
     NgxPaginationModule
   ]
 })

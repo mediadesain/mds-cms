@@ -6,12 +6,16 @@
     <!--Filter List-->
     <hr/>
     <div style="display: flex;flex-direction: row;justify-content: space-around;width: 70%;">
-        <filter-checkbox style="display: flex;flex-direction: row;justify-content: space-around;width: 70%;"
-            Title="Filter by"
-            [data] ="data.products"
-            [FilterModel]="filterBy"
-            [FilteredModel]="filterSelected">
-        </filter-checkbox>
+        <mds-filter-checkbox style="display: flex;flex-direction: row;justify-content: space-around;width: 70%;"
+            class="d-flex flex-column"
+            [titlegroup]="'Filter by'"
+            [closegroup]="'✕'"
+            [classgroup]="'mb-3'"
+            [reset]="'Reset All'"
+            [filterData]="data.products"
+            [filterBy]="filterBy"
+            [filterSelected]="filterSelected">
+        </mds-filter-checkbox>
     </div>
     
     <hr/>

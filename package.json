@@ -18,6 +18,7 @@
     "@angular/platform-browser-dynamic": "~11.2.7",
     "@angular/router": "~11.2.7",
     "firebase": "^8.4.2",
+    "mds-library": "0.0.1-beta.1",
     "ngx-pagination": "^5.1.1",
     "rxjs": "~6.6.0",
     "tslib": "^2.0.0",

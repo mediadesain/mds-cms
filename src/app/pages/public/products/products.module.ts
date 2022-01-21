@@ -3,11 +3,11 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 import { ProductsRoutingModule } from './products-routing.module';
+import { MdsFilterCheckboxModule, MdsPipesModule } from 'mds-library';
 
 import { ProductsComponent } from './product/products.component';
 import { ProductDetailComponent } from 'src/app/pages/public/products/product-detail/product-detail.component';
 
-import { SharedModule } from 'src/app/shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -18,7 +18,8 @@ import { SharedModule } from 'src/app/shared/shared.module';
     CommonModule,
     FormsModule,
     ProductsRoutingModule,
-    SharedModule
+    MdsFilterCheckboxModule,
+    MdsPipesModule
   ]
 })
 export class ProductsModule { }

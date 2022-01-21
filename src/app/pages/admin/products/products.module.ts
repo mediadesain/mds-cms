@@ -5,20 +5,19 @@ import { FormsModule } from '@angular/forms';
 import { ProductsRoutingModule } from './products-routing.module';
 import { ProductsComponent } from './product/products.component';
 import { ProductDetailComponent } from './product-detail/product-detail.component';
-import { SharedModule } from 'src/app/shared/shared.module';
-//import { FilterCheckboxComponent } from 'src/app/components/filter-checkbox/filter-checkbox.component';
+import { MdsFilterCheckboxModule, MdsPipesModule } from 'mds-library';
 
 @NgModule({
   declarations: [
     ProductsComponent,
-    ProductDetailComponent,
-    //FilterCheckboxComponent
+    ProductDetailComponent
   ],
   imports: [
     CommonModule,
     FormsModule,
     ProductsRoutingModule,
-    SharedModule
+    MdsFilterCheckboxModule,
+    MdsPipesModule
   ]
 })
 export class ProductsModule { }
