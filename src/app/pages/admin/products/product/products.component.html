@@ -15,8 +15,6 @@
         <mds-filter-checkbox style="display: flex;flex-direction: row;justify-content: space-around;width: 70%;"
             class="d-flex flex-column"
             [titlegroup]="'Filter by'"
-            [closegroup]="'✕'"
-            [classgroup]="'mb-3'"
             [reset]="'Reset All'"
             [filterData]="data.products"
             [filterBy]="filterBy"
@@ -33,9 +31,9 @@
 
     <!--Data List-->
     <hr/>
-    <div *ngIf="(data.products|filter:filterSelected|filter:{'status':filterDropdown|lowercase}).length == 0">Data Not Found</div>
+    <div *ngIf="(data.products|mdsFilter:filterSelected|mdsFilter:{'status':filterDropdown|lowercase}).length == 0">Data Not Found</div>
     <ol>
-        <li *ngFor="let x of data.products|filter:filterSelected|filter:{'status':filterDropdown|lowercase}">{{x.status}} {{x.name}} - {{x.sku}} <a routerLink="/admin/product/{{x.url}}">Detail</a></li>
+        <li *ngFor="let x of data.products|mdsFilter:filterSelected|mdsFilter:{'status':filterDropdown|lowercase}">{{x.status}} {{x.name}} - {{x.sku}} <a routerLink="/admin/product/{{x.url}}">Detail</a></li>
     </ol>
     <hr/>
 </ng-container>
@@ -44,6 +42,6 @@
 <pre>Filter Selected: {{filterSelected|json}}</pre>
 <pre>
 Auth As: {{authSrvc.data?.role}}
-Data: {{data?.products|filter:filterSelected|json}}
+Data: {{data?.products|mdsFilter:filterSelected|json}}
 Status: {{data?.status|json}}
 </pre>

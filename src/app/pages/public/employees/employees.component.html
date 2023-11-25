@@ -16,8 +16,6 @@
         <mds-filter-checkbox style="display: flex;flex-direction: row;justify-content: space-around;width: 70%;"
             class="d-flex flex-column"
             [titlegroup]="'Filter by'"
-            [closegroup]="'✕'"
-            [classgroup]="'mb-3'"
             [reset]="'Reset All'"
             [filterData]="userSrvc.data"
             [filterBy]="filterBy"
@@ -28,9 +26,9 @@
     <!--Data List-->
     <ng-container *ngIf="userSrvc.data.length == 0">No data Found</ng-container>
     <ng-container *ngIf="userSrvc.data">
-        Total Item/s {{(userSrvc.data|filter:filterSelected).length}}
+        Total Item/s {{(userSrvc.data|mdsFilter:filterSelected).length}}
         <ul style="display: flex; flex-direction: row; flex-wrap: wrap;">
-            <li *ngFor="let a of (userSrvc.data|filter:filterSelected) | paginate: {itemsPerPage: 12, currentPage: page}; let i = index" style="flex: 1 0 21%;">
+            <li *ngFor="let a of (userSrvc.data|mdsFilter:filterSelected) | paginate: {itemsPerPage: 12, currentPage: page}; let i = index" style="flex: 1 0 21%;">
                 <p>{{a.firstName +' '+ a.lastName}} - {{a.gender}} - {{a.status}} - {{a.group}}</p>
                 <img [src]="a.img" style="width: 100px;"/>
             </li>
@@ -42,4 +40,4 @@
 
 <pre>Filter by: {{filterBy|json}}</pre>
 <pre>Filter Selected: {{filterSelected|json}}</pre>
-<pre>{{(userSrvc.data|filter:filterSelected)|json}}</pre>
+<pre>{{(userSrvc.data|mdsFilter:filterSelected)|json}}</pre>

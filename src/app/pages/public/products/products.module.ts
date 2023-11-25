@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 import { ProductsRoutingModule } from './products-routing.module';
-import { MdsFilterCheckboxModule, MdsPipesModule } from 'mds-library';
+import { MdsFilterModule, MdsPipesModule } from 'medes-ui';
 
 import { ProductsComponent } from './product/products.component';
 import { ProductDetailComponent } from 'src/app/pages/public/products/product-detail/product-detail.component';
@@ -18,7 +18,7 @@ import { ProductDetailComponent } from 'src/app/pages/public/products/product-de
     CommonModule,
     FormsModule,
     ProductsRoutingModule,
-    MdsFilterCheckboxModule,
+    MdsFilterModule,
     MdsPipesModule
   ]
 })
